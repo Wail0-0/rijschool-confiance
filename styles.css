@@ -65,7 +65,10 @@
    Reset / basis
    ============================================================ */
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  overflow-x: clip;
+}
 body {
   margin: 0;
   font-family: var(--font-body);
@@ -75,6 +78,8 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  overflow-x: clip;
+  min-width: 0;
 }
 img { max-width: 100%; display: block; }
 a { color: inherit; text-decoration: none; }
@@ -100,6 +105,7 @@ section { position: relative; }
 /* image-slot baseline */
 image-slot {
   display: block;
+  max-width: 100%;
   background:
     repeating-linear-gradient(135deg, #dfe7f4 0 12px, #e8eefb 12px 24px);
   color: var(--muted);
@@ -179,6 +185,7 @@ image-slot {
   position: sticky;
   top: 0;
   z-index: 50;
+  padding-top: env(safe-area-inset-top, 0px);
   background: color-mix(in oklab, var(--bg) 82%, transparent);
   backdrop-filter: blur(14px);
   border-bottom: 1px solid transparent;
@@ -283,6 +290,12 @@ image-slot {
   .nav-cta { display: none; }
   .nav-toggle { display: flex; }
 }
+@media (max-width: 480px) {
+  .nav-inner { height: 64px; gap: 10px; }
+  .brand { font-size: 1.12rem; min-width: 0; flex: 1; }
+  .brand .mark { width: 36px; height: 36px; font-size: 1rem; }
+  .brand small { letter-spacing: .12em; }
+}
 
 /* ============================================================
    Hero
@@ -330,12 +343,18 @@ image-slot {
   .float-card.br { bottom: 12px; right: 8px; }
 }
 
+@media (max-width: 640px) {
+  .hero h1 .hl { white-space: normal; }
+  .hero-actions { flex-direction: column; align-items: stretch; }
+  .hero-actions .btn { width: 100%; justify-content: center; text-align: center; }
+}
 @media (max-width: 480px) {
-  .float-card { padding: 10px 14px; }
+  .float-card { padding: 10px 14px; white-space: normal; max-width: calc(100% - 16px); }
   .float-card .big { font-size: 1.35rem; }
   .float-card.br { gap: 8px; font-size: .9rem; }
-  .hero-photo { height: clamp(240px, 60vw, 380px); }
+  .hero-photo { height: clamp(220px, 58vw, 360px); }
   .btn-lg { font-size: 1rem; padding: 15px 22px; }
+  [data-style="energiek"] { --display-scale: 1; }
 }
 
 /* ============================================================
@@ -345,6 +364,18 @@ image-slot {
 .trustbar .wrap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 24px; padding-block: 22px; }
 .trustbar .ti { display: flex; align-items: center; gap: 12px; color: var(--ink-soft); font-weight: 600; font-size: .98rem; }
 .trustbar .ti::before { content: ""; width: 8px; height: 8px; background: var(--accent); flex: none; }
+@media (max-width: 720px) {
+  .trustbar .wrap {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px 16px;
+    justify-content: stretch;
+  }
+  .trustbar .ti { font-size: .9rem; line-height: 1.35; }
+}
+@media (max-width: 400px) {
+  .trustbar .wrap { grid-template-columns: 1fr; }
+}
 
 /* ============================================================
    Section heading
@@ -367,7 +398,8 @@ image-slot {
 @media (max-width: 800px) {
   .split { grid-template-columns: 1fr; }
   .split.rev .split-media { order: 0; }
-  .split-media { max-width: 440px; }
+  .split-media { max-width: none; width: 100%; }
+  .split-media image-slot { height: clamp(280px, 55vw, 440px); }
 }
 
 /* ============================================================
@@ -390,7 +422,12 @@ image-slot {
 .region-media image-slot { width: 100%; height: 100%; min-height: 360px; border-radius: 0; }
 @media (max-width: 800px) {
   .region-grid { grid-template-columns: 1fr; }
-  .region-media image-slot { min-height: 280px; }
+  .region-media image-slot { min-height: 240px; }
+}
+@media (max-width: 480px) {
+  .region-copy { padding: 28px var(--gutter); }
+  .region-copy h2 { font-size: clamp(1.55rem, 6.5vw, 2rem); }
+  .area-tags span { font-size: .84rem; padding: 7px 12px; }
 }
 
 /* ============================================================
@@ -429,6 +466,12 @@ image-slot {
 .price-note { text-align: center; color: var(--muted); font-size: .92rem; margin-top: 26px; }
 @media (max-width: 960px) { .price-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 600px) { .price-grid { grid-template-columns: 1fr; } }
+@media (max-width: 480px) {
+  .price-grid { margin-top: 36px; gap: 16px; }
+  .price-card { padding: 24px 20px; }
+  .price-card .amount .val { font-size: 2.5rem; }
+  .price-card:hover { transform: none; }
+}
 
 /* ============================================================
    Pakketten
@@ -472,6 +515,10 @@ image-slot {
 .rev-card .who span { display: block; color: var(--muted); font-size: .84rem; font-weight: 500; }
 @media (max-width: 960px) { .rev-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 600px) { .rev-grid { grid-template-columns: 1fr; } }
+@media (max-width: 640px) {
+  .rev-head { flex-direction: column; align-items: flex-start; }
+  .rev-score .num { font-size: 2.8rem; }
+}
 
 /* ============================================================
    FAQ
@@ -494,6 +541,10 @@ image-slot {
 .faq-a { max-height: 0; overflow: hidden; transition: max-height .3s ease; }
 .faq-a-inner { padding: 0 22px 22px; color: var(--muted); }
 @media (max-width: 860px) { .faq-grid { grid-template-columns: 1fr; } }
+@media (max-width: 480px) {
+  .faq-q { font-size: 1rem; padding: 16px 18px; gap: 12px; }
+  .faq-a-inner { padding: 0 18px 18px; }
+}
 
 /* ============================================================
    Contact / formulier
@@ -548,10 +599,15 @@ image-slot {
   .form .frow { grid-template-columns: 1fr; }
 }
 
+@media (max-width: 600px) {
+  .segmented { flex-direction: column; align-items: stretch; }
+  .segmented button { width: 100%; white-space: normal; text-align: center; justify-content: center; }
+}
 @media (max-width: 480px) {
-  .contact-info strong { font-size: 1.05rem; }
-  .segmented { gap: 6px; }
-  .segmented button { padding: 10px 12px; font-size: .88rem; }
+  .contact-info strong { font-size: 1.05rem; word-break: break-word; }
+  .segmented { gap: 8px; }
+  .segmented button { padding: 12px 14px; font-size: .92rem; min-height: 44px; }
+  .form { padding: 22px 18px; }
 }
 
 /* ============================================================
@@ -566,6 +622,26 @@ image-slot {
 .footer-cols a, .footer-cols .fl { display: block; color: rgba(255,255,255,.66); margin-bottom: 9px; font-size: .95rem; }
 .footer-cols a:hover { color: #fff; }
 .footer-bottom { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding-top: 22px; font-size: .85rem; color: rgba(255,255,255,.5); }
+@media (max-width: 640px) {
+  .footer-top { flex-direction: column; gap: 28px; }
+  .footer-cols { width: 100%; gap: 28px; }
+  .footer-bottom { flex-direction: column; align-items: flex-start; gap: 8px; }
+}
+
+/* ============================================================
+   Mobiel — algemene aanpassingen
+   ============================================================ */
+@media (max-width: 640px) {
+  :root { --gutter: clamp(16px, 4.5vw, 24px); }
+  .section-pad { padding-block: clamp(48px, 12vw, 88px); }
+  .sec-head h2 { font-size: clamp(1.65rem, 7vw, 2.25rem); }
+  .sec-head p { font-size: 1rem; }
+  .btn { white-space: normal; }
+  .pack:hover, .price-card:hover { transform: none; }
+  .nav-mobile nav {
+    padding-bottom: max(20px, env(safe-area-inset-bottom, 0px));
+  }
+}
 
 /* ============================================================
    Reveal on scroll — content is standaard ZICHTBAAR.

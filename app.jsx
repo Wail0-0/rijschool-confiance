@@ -79,6 +79,12 @@ function Nav() {
     };
   }, []);
 
+  /* voorkom scrollen achter het open mobiele menu */
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [menuOpen]);
+
   const handleToggle = () => setMenuOpen((open) => !open);
   const handleNavClick = () => setMenuOpen(false);
 
