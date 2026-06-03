@@ -1,0 +1,13 @@
+{
+  "name": "rijschool-confiance",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Rijschool Confiance — landingspagina (React via CDN + Babel in de browser).",
+  "scripts": {
+    "dev": "live-server --port=8000 --entry-file=index.html",
+    "start": "live-server --port=8000 --entry-file=index.html"
+  },
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  }
+}
