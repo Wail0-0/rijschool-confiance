@@ -4,22 +4,21 @@
 const { useState, useEffect, useRef } = React;
 
 /* ---------- content data ---------- */
-const AREAS = [
-  "Rotterdam-Centrum", "Rotterdam-Zuid", "Kralingen", "Charlois", "Feijenoord",
-  "Hillegersberg", "Delfshaven", "Schiedam", "Capelle a/d IJssel", "Barendrecht",
-  "Vlaardingen", "Ridderkerk",
-];
-
-const PACKAGES = [
-  { name: "Starterspakket", meta: "10 rijlessen × 60 min", price: 495, was: 500, save: "Voordeliger dan los" },
-  { name: "Doorpakker", meta: "20 rijlessen × 90 min", price: 1450, was: 1500, save: "€50 voordeel", feat: true },
-  { name: "Examenpakket", meta: "Tussentijdse toets + examen", price: null, note: "Op aanvraag. Incl. lesauto bij CBR, CBR-kosten apart." },
-];
-
-const REVIEWS = [
-  { stars: 5, quote: "Super rustige instructeur. Door de persoonlijke aanpak ben ik in één keer geslaagd. Echt een aanrader voor regio Rotterdam!", name: "Sanne de Vries", meta: "Geslaagd · Rotterdam-Zuid", id: "rev1" },
-  { stars: 5, quote: "Begon met flink wat examenstress, maar Confiance nam alle tijd voor me. Vertrouwen kreeg ik echt terug achter het stuur.", name: "Younes el Amrani", meta: "Geslaagd · Kralingen", id: "rev2" },
-  { stars: 5, quote: "Duidelijke uitleg, flexibel inplannen en een nette lesauto. Top begeleiding van proefles tot examen.", name: "Lisa Bakker", meta: "Geslaagd · Schiedam", id: "rev3" },
+const GESLAAGD_PHOTOS = [
+  "images/geslaagd/505117845_18013138370746836_4240643234952017786_n.jpg",
+  "images/geslaagd/505499879_18013138052746836_4856793965508230546_n.jpg",
+  "images/geslaagd/510954290_18013139231746836_2285980070674998542_n.jpg",
+  "images/geslaagd/541676020_18020237564746836_1842049651904237913_n.jpg",
+  "images/geslaagd/568743199_18026839310746836_245520182515483839_n.jpg",
+  "images/geslaagd/586276401_18029985632746836_6827936111124191817_n.jpg",
+  "images/geslaagd/587490408_18032689802746836_1364934646307047012_n.jpg",
+  "images/geslaagd/619614281_18009798722825199_1543830528189020152_n.jpg",
+  "images/geslaagd/628416926_18040843136746836_112453354783511683_n.jpg",
+  "images/geslaagd/628574731_18379335250086567_7025918174924890030_n.jpg",
+  "images/geslaagd/640922325_18040781093746836_8709303707900824573_n.jpg",
+  "images/geslaagd/649240675_18042423716746836_8282710191229587838_n.jpg",
+  "images/geslaagd/656148640_18044205065746836_3048059604311403503_n.jpg",
+  "images/geslaagd/703298290_18051672371746836_6290228324899031866_n.jpg",
 ];
 
 const FAQ = [
@@ -40,6 +39,26 @@ function Reveal({ as = "div", className = "", children, ...rest }) {
   return <Tag className={"reveal " + className} {...rest}>{children}</Tag>;
 }
 
+function Brand({ onClick, className = "" }) {
+  return (
+    <a
+      className={"brand" + (className ? " " + className : "")}
+      href="#top"
+      aria-label="Rijschool Confiance, naar boven"
+      onClick={onClick}
+    >
+      <img
+        className="brand-logo"
+        src="images/logo.png"
+        alt="Rijschool Confiance"
+        width="200"
+        height="56"
+        decoding="async"
+      />
+    </a>
+  );
+}
+
 /* ============================================================
    NAVBAR
    ============================================================ */
@@ -47,7 +66,6 @@ const NAV_LINKS = [
   ["#over", "Over ons"],
   ["#lesgebied", "Lesgebied"],
   ["#tarieven", "Tarieven"],
-  ["#pakketten", "Pakketten"],
   ["#reviews", "Reviews"],
   ["#faq", "FAQ"],
 ];
@@ -87,42 +105,79 @@ function Nav() {
 
   const handleToggle = () => setMenuOpen((open) => !open);
   const handleNavClick = () => setMenuOpen(false);
+  const handleBackdropClick = () => setMenuOpen(false);
 
   return (
-    <header className={"nav" + (scrolled ? " scrolled" : "") + (menuOpen ? " menu-open" : "")}>
-      <div className="wrap nav-inner">
-        <a className="brand" href="#top" aria-label="Rijschool Confiance, naar boven" onClick={handleNavClick}>
-          <span className="mark">C</span>
-          <span>Confiance<small>Rijschool · Rotterdam</small></span>
-        </a>
-        <nav className="nav-links" aria-label="Hoofdmenu">
-          {NAV_LINKS.map(([href, label]) => (
-            <a key={href} href={href}>{label}</a>
-          ))}
-        </nav>
-        <div className="nav-cta">
-          <a className="btn btn-primary" href="#contact">Gratis proefles</a>
+    <>
+      <header className={"nav" + (scrolled ? " scrolled" : "") + (menuOpen ? " menu-open" : "")}>
+        <div className="wrap nav-inner">
+          <Brand onClick={handleNavClick} />
+          <nav className="nav-links" aria-label="Hoofdmenu">
+            {NAV_LINKS.map(([href, label]) => (
+              <a key={href} href={href}>{label}</a>
+            ))}
+          </nav>
+          <div className="nav-actions">
+            <a className="nav-phone" href="tel:+31684346439" aria-label="Bel 06 84 34 64 39">
+              <Icon name="phone" size={17} />
+              <span>06 84 34 64 39</span>
+            </a>
+            <a className="btn btn-primary nav-cta-btn" href="#contact">Gratis proefles</a>
+          </div>
+          <button
+            className="nav-toggle"
+            type="button"
+            aria-label={menuOpen ? "Menu sluiten" : "Menu openen"}
+            aria-expanded={menuOpen}
+            aria-controls="mobiel-menu"
+            onClick={handleToggle}
+          >
+            <span /><span /><span />
+          </button>
         </div>
-        <button
-          className="nav-toggle"
-          type="button"
-          aria-label={menuOpen ? "Menu sluiten" : "Menu openen"}
-          aria-expanded={menuOpen}
-          aria-controls="mobiel-menu"
-          onClick={handleToggle}
-        >
-          <span /><span /><span />
-        </button>
-      </div>
-      <div id="mobiel-menu" className={"nav-mobile" + (menuOpen ? " open" : "")}>
+      </header>
+
+      <div
+        className={"nav-backdrop" + (menuOpen ? " visible" : "")}
+        aria-hidden="true"
+        onClick={handleBackdropClick}
+      />
+      <div
+        id="mobiel-menu"
+        className={"nav-mobile" + (menuOpen ? " open" : "")}
+        role="dialog"
+        aria-modal={menuOpen}
+        aria-hidden={!menuOpen}
+        aria-label="Navigatiemenu"
+      >
+        <div className="nav-mobile-head">
+          <Brand onClick={handleNavClick} />
+          <button
+            type="button"
+            className="nav-close"
+            aria-label="Menu sluiten"
+            onClick={handleNavClick}
+          >
+            <span /><span />
+          </button>
+        </div>
         <nav aria-label="Mobiel menu">
           {NAV_LINKS.map(([href, label]) => (
             <a key={href} href={href} onClick={handleNavClick}>{label}</a>
           ))}
-          <a className="btn btn-primary" href="#contact" onClick={handleNavClick}>Gratis proefles</a>
         </nav>
+        <div className="nav-mobile-foot">
+          <a className="btn btn-primary" href="#contact" onClick={handleNavClick}>
+            Gratis proefles
+            <Icon name="arrow" size={18} />
+          </a>
+          <a className="nav-mobile-phone" href="tel:+31684346439" onClick={handleNavClick}>
+            <Icon name="phone" size={18} />
+            Bel 06 84 34 64 39
+          </a>
+        </div>
       </div>
-    </header>
+    </>
   );
 }
 
@@ -130,60 +185,39 @@ function Nav() {
    HERO
    ============================================================ */
 function Hero({ title, sub }) {
+  const usps = [
+    "Je eerste proefles is volledig gratis",
+    "Eén vaste, vertrouwde instructeur",
+    "Lessen op jouw tempo, zonder druk",
+  ];
   return (
-    <section className="hero section-pad" id="top">
-      <div className="wrap hero-grid">
+    <section className="hero section-pad" id="top" aria-label="Intro">
+      <div className="wrap hero-inner">
         <div className="hero-copy">
-          <Reveal as="span" className="eyebrow">Rijschool in regio Rotterdam</Reveal>
           <Reveal as="h1" style={{ transitionDelay: ".05s" }}
             dangerouslySetInnerHTML={{ __html: title }} />
           <Reveal as="p" className="hero-sub" style={{ transitionDelay: ".1s" }}>{sub}</Reveal>
-          <Reveal className="hero-actions" style={{ transitionDelay: ".15s" }}>
+          <Reveal as="ul" className="hero-usps" style={{ transitionDelay: ".15s" }}>
+            {usps.map((u) => (
+              <li key={u}>{u}</li>
+            ))}
+          </Reveal>
+          <Reveal className="hero-actions" style={{ transitionDelay: ".2s" }}>
             <a className="btn btn-primary btn-lg" href="#contact">
               Plan je gratis proefles
+              <Icon name="arrow" size={19} />
             </a>
-            <a className="btn btn-ghost btn-lg" href="#tarieven">Bekijk tarieven</a>
+            <a className="btn btn-ghost btn-lg" href="tel:+31684346439">
+              <Icon name="phone" size={18} />
+              Bel direct
+            </a>
           </Reveal>
-          <Reveal className="hero-trust" style={{ transitionDelay: ".2s" }}>
-            <Stars n={5} />
-            <small>Beoordeeld met een 9,4 door geslaagde leerlingen</small>
+          <Reveal as="p" className="hero-reassure" style={{ transitionDelay: ".25s" }}>
+            Vrijblijvend &amp; zonder verplichtingen
           </Reveal>
         </div>
-        <Reveal className="hero-media" style={{ transitionDelay: ".1s" }}>
-          <image-slot id="hero-photo" class="hero-photo" shape="rect"
-            placeholder="Sleep hier een foto: lesauto of leerling"></image-slot>
-          <div className="float-card tl">
-            <div className="big">9,4</div>
-            <div className="lbl">Gem. cijfer leerlingen</div>
-          </div>
-          <div className="float-card br">
-            <div className="big" style={{ fontSize: "1.12rem" }}>Gratis proefles</div>
-            <div className="lbl">Vrijblijvend kennismaken</div>
-          </div>
-        </Reveal>
       </div>
     </section>
-  );
-}
-
-/* ============================================================
-   TRUSTBAR
-   ============================================================ */
-function TrustBar() {
-  const items = [
-    "Gratis & vrijblijvende proefles",
-    "Vaste, vertrouwde instructeur",
-    "Flexibel lessen inplannen",
-    "Nette, moderne lesauto",
-  ];
-  return (
-    <div className="trustbar">
-      <div className="wrap">
-        {items.map((tx, k) => (
-          <div className="ti" key={k}>{tx}</div>
-        ))}
-      </div>
-    </div>
   );
 }
 
@@ -197,11 +231,12 @@ function Over() {
     { h: "Op jouw tempo", p: "De één heeft meer tijd nodig dan de ander. We stemmen elke les af op waar jij staat, zonder druk." },
   ];
   return (
-    <section className="section-pad" id="over">
+    <section className="section-pad band-light" id="over">
       <div className="wrap split">
         <Reveal className="split-media">
-          <image-slot id="over-photo" shape="rect"
-            placeholder="Sleep hier een foto: instructeur"></image-slot>
+          <image-slot id="over-photo" shape="rect" fit="cover"
+            src="images/geslaagd/505499879_18013138052746836_4856793965508230546_n.jpg"
+            placeholder="Geslaagde leerling bij Rijschool Confiance"></image-slot>
         </Reveal>
         <div className="split-copy">
           <Reveal as="span" className="eyebrow">Over Confiance</Reveal>
@@ -231,30 +266,28 @@ function Over() {
    ============================================================ */
 function Lesgebied() {
   return (
-    <section className="section-pad" id="lesgebied">
-      <div className="wrap">
-        <Reveal className="region">
-          <div className="region-grid">
-            <div className="region-copy">
-              <span className="eyebrow">Lesgebied</span>
-              <h2>Wij lessen in heel groot-Rotterdam</h2>
-              <p>
-                Van de Erasmusbrug tot de buitenwijken: we kennen de straten, rotondes en
-                examenroutes van de regio op ons duimpje. Je oefent precies daar waar het examen plaatsvindt.
-              </p>
-              <div className="area-tags">
-                {AREAS.map((a) => <span key={a}>{a}</span>)}
-              </div>
-              <a className="btn btn-light" href="#contact" style={{ marginTop: "28px" }}>
-                Lessen jullie bij mij? Vraag het ons
-              </a>
-            </div>
-            <div className="region-media">
-              <image-slot id="region-photo" shape="rect"
-                placeholder="Sleep hier een foto: Rotterdam / Erasmusbrug"></image-slot>
-            </div>
-          </div>
+    <section className="section-pad band-muted" id="lesgebied">
+      <div className="wrap split rev">
+        <Reveal className="split-media">
+          <image-slot id="region-photo" shape="rect" fit="cover"
+            src="images/rotterdam.jpg"
+            placeholder="Rotterdam skyline"></image-slot>
         </Reveal>
+        <div className="split-copy">
+          <Reveal as="span" className="eyebrow">Lesgebied</Reveal>
+          <Reveal as="h2" style={{ fontSize: "clamp(2rem,3.6vw,3rem)", marginTop: "16px" }}>
+            Wij lessen in heel Rotterdam
+          </Reveal>
+          <Reveal as="p" style={{ color: "var(--muted)", fontSize: "1.1rem", marginTop: "16px" }}>
+            Van de Erasmusbrug tot de buitenwijken: we kennen de straten, rotondes en
+            examenroutes van de regio op ons duimpje. Je oefent precies daar waar het examen plaatsvindt.
+          </Reveal>
+          <Reveal>
+            <a className="btn btn-primary" href="#contact" style={{ marginTop: "28px" }}>
+              Plan een proefles
+            </a>
+          </Reveal>
+        </div>
       </div>
     </section>
   );
@@ -266,91 +299,67 @@ function Lesgebied() {
 function Tarieven() {
   const cards = [
     {
-      tag: "Kennismaken", name: "Gratis proefles", val: "€0", per: "60 min",
-      desc: "Maak vrijblijvend kennis en ervaar of het klikt.",
+      tag: "Zilveren pakket", val: "€1320",
+      desc: "Een stevige basis om vol vertrouwen op te bouwen richting je examen.",
       feat: false,
-      list: ["Volledig gratis", "Geen verplichtingen", "Direct goede indruk"],
-      cta: "Plan proefles",
+      list: ["20 rijlessen", "Inclusief praktijkexamen", "Vaste, vertrouwde instructeur"],
     },
     {
-      tag: "Populair", name: "Rijles 90 min", val: "€75", per: "per les",
-      desc: "Langere lessen = sneller leren en meer kilometers maken.",
+      tag: "Gouden pakket", val: "€1800",
+      desc: "Onze meest gekozen optie: ruim de tijd om alles goed onder de knie te krijgen.",
       feat: true,
-      list: ["90 minuten effectief rijden", "Meer voortgang per les", "Ideaal richting examen"],
-      cta: "Kies 90 minuten",
+      list: ["30 rijlessen", "Inclusief praktijkexamen", "Ideaal voor de meeste leerlingen"],
     },
     {
-      tag: "Flexibel", name: "Rijles 60 min", val: "€50", per: "per les",
-      desc: "De vertrouwde losse rijles van een uur.",
+      tag: "Diamanten pakket", val: "€2250",
+      desc: "Alle ruimte en rust, zonder zorgen over extra lessen tot je er klaar voor bent.",
       feat: false,
-      list: ["60 minuten rijles", "Per les af te rekenen", "Flexibel in te plannen"],
-      cta: "Kies 60 minuten",
+      list: ["40 rijlessen", "Inclusief praktijkexamen", "Maximale voorbereiding"],
     },
   ];
+  const losse = [
+    { naam: "Losse les", per: "60 minuten", val: "€55" },
+    { naam: "Losse les", per: "90 minuten", val: "€75" },
+    { naam: "Los examen", per: "praktijkexamen", val: "€350" },
+  ];
   return (
-    <section className="section-pad" id="tarieven">
+    <section className="section-pad band-light" id="tarieven">
       <div className="wrap">
         <Reveal className="sec-head center">
           <span className="eyebrow" style={{ justifyContent: "center" }}>Tarieven</span>
           <h2>Heldere prijzen, geen verrassingen</h2>
-          <p>Eerlijke tarieven voor de regio Rotterdam. Je start altijd met een gratis proefles.</p>
+          <p>Kies het pakket dat bij je past. Je start altijd met een gratis proefles.</p>
         </Reveal>
         <div className="price-grid">
           {cards.map((c, k) => (
             <Reveal className={"price-card" + (c.feat ? " feat" : "")} key={k} style={{ transitionDelay: (k * 0.07) + "s" }}>
-              <span className="chip pc-tag">{c.tag}</span>
-              <h3>{c.name}</h3>
-              <div className="amount"><span className="val">{c.val}</span><span className="per">/ {c.per}</span></div>
+              {c.feat && <span className="chip pc-tag">Meest gekozen</span>}
+              <h3>{c.tag}</h3>
+              <div className="amount"><span className="val">{c.val}</span></div>
               <p className="desc">{c.desc}</p>
               <ul>
                 {c.list.map((l, i) => (
                   <li key={i}>{l}</li>
                 ))}
               </ul>
-              <a className={"btn " + (c.feat ? "btn-light" : "btn-primary")} href="#contact">{c.cta}</a>
+              <a className={"btn " + (c.feat ? "btn-light" : "btn-primary")} href="#contact">Kies dit pakket</a>
             </Reveal>
           ))}
         </div>
-        <p className="price-note">Prijzen incl. btw. Examen- en CBR-kosten worden apart in rekening gebracht door het CBR.</p>
-      </div>
-    </section>
-  );
-}
 
-/* ============================================================
-   PAKKETTEN
-   ============================================================ */
-function Pakketten() {
-  return (
-    <section className="section-pad" id="pakketten" style={{ background: "var(--surface)" }}>
-      <div className="wrap">
-        <Reveal className="sec-head center">
-          <span className="eyebrow" style={{ justifyContent: "center" }}>Pakketten</span>
-          <h2>Voordeliger met een lespakket</h2>
-          <p>Liever in één keer geregeld? Met een pakket les je gestructureerd én voordeliger.</p>
-        </Reveal>
-        <div className="pack-grid">
-          {PACKAGES.map((p, k) => (
-            <Reveal className="pack" key={k} style={{ transitionDelay: (k * 0.07) + "s", ...(p.feat ? { borderColor: "color-mix(in oklab, var(--accent) 45%, var(--line))", boxShadow: "var(--shadow-md)" } : {}) }}>
-              {p.feat && <span className="chip pc-tag" style={{ alignSelf: "flex-start", marginBottom: "4px" }}>Meest gekozen</span>}
-              <div className="pk-name">{p.name}</div>
-              <div className="pk-meta">{p.meta}</div>
-              {p.price != null ? (
-                <>
-                  <div className="pk-price"><b>€{p.price.toLocaleString("nl-NL")}</b>{p.was && <s>€{p.was.toLocaleString("nl-NL")}</s>}</div>
-                  {p.save && <span className="pk-save">{p.save}</span>}
-                </>
-              ) : (
-                <>
-                  <div className="pk-price"><b style={{ fontSize: "1.5rem" }}>Op aanvraag</b></div>
-                  <p style={{ color: "var(--muted)", fontSize: ".92rem", marginTop: "8px" }}>{p.note}</p>
-                </>
-              )}
-              <a className="btn btn-ghost" href="#contact" style={{ marginTop: "auto", justifyContent: "center" }}>Meer weten</a>
-            </Reveal>
+        <Reveal className="losse-prices">
+          {losse.map((l, k) => (
+            <div className="losse-item" key={k}>
+              <div>
+                <div className="losse-name">{l.naam}</div>
+                <div className="losse-per">{l.per}</div>
+              </div>
+              <div className="losse-val">{l.val}</div>
+            </div>
           ))}
-        </div>
-        <p className="price-note">Pakketprijzen zijn richtprijzen. We stellen samen een plan op dat past bij jouw rij-ervaring.</p>
+        </Reveal>
+
+        <p className="price-note">Prijzen incl. btw. CBR-kosten worden apart in rekening gebracht door het CBR.</p>
       </div>
     </section>
   );
@@ -360,8 +369,72 @@ function Pakketten() {
    REVIEWS
    ============================================================ */
 function Reviews() {
+  const track = [...GESLAAGD_PHOTOS, ...GESLAAGD_PHOTOS];
+  const scrollerRef = useRef(null);
+
+  useEffect(() => {
+    const el = scrollerRef.current;
+    if (!el) return;
+
+    const SPEED = 38;
+    let paused = false;
+    let resumeTimer = null;
+    let raf = null;
+    let last = null;
+    let pos = el.scrollLeft;
+    let lastSet = pos;
+
+    const half = () => el.scrollWidth / 2;
+
+    const step = (now) => {
+      if (last == null) last = now;
+      const dt = (now - last) / 1000;
+      last = now;
+
+      if (Math.abs(el.scrollLeft - lastSet) > 1.5) pos = el.scrollLeft;
+
+      if (!paused) {
+        pos += SPEED * dt;
+        const h = half();
+        if (h > 0 && pos >= h) pos -= h;
+        el.scrollLeft = pos;
+        lastSet = el.scrollLeft;
+      }
+      raf = requestAnimationFrame(step);
+    };
+    raf = requestAnimationFrame(step);
+
+    const pause = () => { paused = true; };
+    const resume = () => { paused = false; };
+    const pauseBriefly = () => {
+      paused = true;
+      if (resumeTimer) clearTimeout(resumeTimer);
+      resumeTimer = setTimeout(() => { paused = false; }, 1800);
+    };
+
+    el.addEventListener("pointerenter", pause);
+    el.addEventListener("pointerleave", resume);
+    el.addEventListener("pointerdown", pause);
+    window.addEventListener("pointerup", resume);
+    el.addEventListener("wheel", pauseBriefly, { passive: true });
+    el.addEventListener("touchstart", pause, { passive: true });
+    el.addEventListener("touchend", pauseBriefly, { passive: true });
+
+    return () => {
+      cancelAnimationFrame(raf);
+      if (resumeTimer) clearTimeout(resumeTimer);
+      el.removeEventListener("pointerenter", pause);
+      el.removeEventListener("pointerleave", resume);
+      el.removeEventListener("pointerdown", pause);
+      window.removeEventListener("pointerup", resume);
+      el.removeEventListener("wheel", pauseBriefly);
+      el.removeEventListener("touchstart", pause);
+      el.removeEventListener("touchend", pauseBriefly);
+    };
+  }, []);
+
   return (
-    <section className="section-pad" id="reviews">
+    <section className="section-pad band-muted" id="reviews">
       <div className="wrap">
         <Reveal className="rev-head">
           <div className="sec-head" style={{ margin: 0 }}>
@@ -369,26 +442,25 @@ function Reviews() {
             <h2>Leerlingen rijden met vertrouwen</h2>
           </div>
           <div className="rev-score">
-            <div className="num">9,4</div>
+            <GoogleG size={40} />
             <div>
-              <Stars n={5} />
-              <small style={{ display: "block" }}>Gem. beoordeling van geslaagden</small>
+              <div className="rev-score-top">
+                <span className="num">5,0</span>
+                <Stars n={5} />
+              </div>
+              <small>Beoordeling op Google</small>
             </div>
           </div>
         </Reveal>
-        <div className="rev-grid">
-          {REVIEWS.map((r, k) => (
-            <Reveal className="rev-card" key={k} style={{ transitionDelay: (k * 0.07) + "s" }}>
-              <Stars n={r.stars} />
-              <p className="quote">“{r.quote}”</p>
-              <div className="who">
-                <image-slot id={r.id} shape="rect" placeholder="foto"></image-slot>
-                <div><b>{r.name}</b><span>{r.meta}</span></div>
-              </div>
-            </Reveal>
+      </div>
+      <div className="geslaagd-marquee" ref={scrollerRef} aria-label="Foto's van geslaagde leerlingen">
+        <div className="geslaagd-track">
+          {track.map((src, k) => (
+            <figure className="geslaagd-item" key={src + "-" + k}>
+              <img src={src} alt="Geslaagde leerling bij Rijschool Confiance" loading="lazy" decoding="async" draggable="false" />
+            </figure>
           ))}
         </div>
-        <p className="price-note">Voorbeeldreviews. Vervang ze door echte ervaringen van je geslaagden.</p>
       </div>
     </section>
   );
@@ -400,13 +472,12 @@ function Reviews() {
 function Faq() {
   const [open, setOpen] = useState(0);
   return (
-    <section className="section-pad" id="faq" style={{ background: "var(--surface)" }}>
+    <section className="section-pad band-light" id="faq">
       <div className="wrap faq-grid">
         <Reveal className="sec-head" style={{ margin: 0 }}>
           <span className="eyebrow">Veelgestelde vragen</span>
           <h2>Goed om te weten</h2>
           <p>Staat jouw vraag er niet bij? Bel of mail ons gerust. We denken graag met je mee.</p>
-          <a className="btn btn-primary" href="#contact" style={{ marginTop: "22px" }}>Stel je vraag</a>
         </Reveal>
         <div className="faq-list">
           {FAQ.map((f, k) => {
@@ -432,13 +503,32 @@ function Faq() {
 /* ============================================================
    CONTACT / FORMULIER
    ============================================================ */
+const CONTACT_TYPES = [
+  { value: "Gratis proefles", title: "Gratis proefles", desc: "Maak vrijblijvend kennis — zonder verplichtingen.", tag: "Gratis" },
+  { value: "Losse rijlessen", title: "Losse rijlessen", desc: "Flexibel per les, 60 of 90 minuten." },
+  { value: "Lespakket", title: "Lespakket", desc: "Voordelig en gericht richting je examen." },
+  { value: "Een vraag", title: "Ik heb een vraag", desc: "Stel je vraag, we reageren snel." },
+];
+const CONTACT_STEPS = ["Jouw keuze", "Gegevens", "Bevestigen"];
+const TRANSMISSIES = ["Schakelauto", "Automaat", "Weet ik nog niet"];
+const EMPTY_FORM = { type: "Gratis proefles", transmissie: "Schakelauto", naam: "", email: "", tel: "", plaats: "", bericht: "" };
+
 function Contact() {
-  const [form, setForm] = useState({ naam: "", email: "", tel: "", type: "Gratis proefles", bericht: "" });
+  const [step, setStep] = useState(0);
+  const [form, setForm] = useState(EMPTY_FORM);
   const [errors, setErrors] = useState({});
   const [sent, setSent] = useState(false);
-  const set = (k, v) => setForm((f) => ({ ...f, [k]: v }));
 
-  const validate = () => {
+  const set = (key, value) => {
+    setForm((f) => ({ ...f, [key]: value }));
+    setErrors((e) => (e[key] ? { ...e, [key]: undefined } : e));
+  };
+
+  const wantsLessons = form.type === "Losse rijlessen" || form.type === "Lespakket";
+  const isLastStep = step === CONTACT_STEPS.length - 1;
+  const firstName = form.naam.trim().split(" ")[0] || "rijder";
+
+  const validateDetails = () => {
     const e = {};
     if (!form.naam.trim()) e.naam = "Vul je naam in";
     if (!/^\S+@\S+\.\S+$/.test(form.email)) e.email = "Vul een geldig e-mailadres in";
@@ -446,83 +536,203 @@ function Contact() {
     setErrors(e);
     return Object.keys(e).length === 0;
   };
-  const submit = (ev) => {
+
+  const handleNext = () => {
+    if (step === 1 && !validateDetails()) return;
+    setStep((s) => Math.min(s + 1, CONTACT_STEPS.length - 1));
+  };
+  const handleBack = () => setStep((s) => Math.max(s - 1, 0));
+
+  const handleSubmit = (ev) => {
     ev.preventDefault();
-    if (!validate()) return;
+    if (!validateDetails()) {
+      setStep(1);
+      return;
+    }
     setSent(true);
   };
-  const types = ["Gratis proefles", "Rijles 60 min", "Rijles 90 min", "Pakket", "Vraag"];
+
+  const handleReset = () => {
+    setForm(EMPTY_FORM);
+    setErrors({});
+    setStep(0);
+    setSent(false);
+  };
+
+  const mailHref =
+    "mailto:rijschoolconfiance@gmail.com?subject=" +
+    encodeURIComponent("Aanmelding: " + form.type) +
+    "&body=" +
+    encodeURIComponent(
+      "Naam: " + form.naam +
+      "\nTelefoon: " + form.tel +
+      "\nE-mail: " + form.email +
+      (form.plaats ? "\nWoonplaats: " + form.plaats : "") +
+      (wantsLessons ? "\nVoorkeur: " + form.transmissie : "") +
+      "\n\n" + form.bericht
+    );
+
+  const summaryRows = [
+    ["Aanmelding", form.type],
+    wantsLessons && ["Voorkeur", form.transmissie],
+    ["Naam", form.naam],
+    ["Telefoon", form.tel],
+    ["E-mail", form.email],
+    form.plaats && ["Woonplaats", form.plaats],
+  ].filter(Boolean);
 
   return (
-    <section className="contact section-pad" id="contact">
-      <div className="wrap contact-grid">
-        <div>
-          <span className="eyebrow" style={{ color: "color-mix(in oklab, var(--accent) 55%, #fff)" }}>Aanmelden</span>
-          <h2 style={{ marginTop: "16px" }}>Klaar om te starten?</h2>
-          <p className="lead">Laat je gegevens achter voor een <strong>gratis proefles</strong> of stel je vraag. We nemen snel contact met je op.</p>
-          <div className="contact-info">
-            <a href="tel:+31684346439">
-              <small>Bel of app ons</small>
-              <strong>+31 6 84 34 64 39</strong>
-            </a>
-            <a href="mailto:rijschoolconfiance@gmail.com">
-              <small>Mail ons je vraag</small>
-              <strong>rijschoolconfiance@gmail.com</strong>
-            </a>
-            <div className="ci">
-              <small>Lesgebied</small>
-              <strong>Regio Rotterdam</strong>
-            </div>
-          </div>
-        </div>
-
-        <div className="form">
+    <section className="section-pad band-muted" id="contact">
+      <div className="wrap aanmeld-wrap">
+        <Reveal className="aanmeld-card">
           {sent ? (
-            <div className="form-success">
-              <h3>Bedankt, {form.naam.split(" ")[0]}!</h3>
-              <p>We hebben je aanmelding ontvangen en nemen snel contact met je op voor je {form.type.toLowerCase()}.</p>
-              <a className="btn btn-ghost" style={{ marginTop: "22px", display: "inline-flex", width: "auto" }}
-                href={"mailto:rijschoolconfiance@gmail.com?subject=" + encodeURIComponent("Aanmelding: " + form.type) + "&body=" + encodeURIComponent("Naam: " + form.naam + "\nTelefoon: " + form.tel + "\n\n" + form.bericht)}>
-                Of mail ons direct
-              </a>
+            <div className="aanmeld-done">
+              <span className="aanmeld-done-mark"><Icon name="check" size={26} stroke={2.5} /></span>
+              <h3>Bedankt, {firstName}</h3>
+              <p>
+                We nemen snel contact met je op over je <strong>{form.type.toLowerCase()}</strong>.
+              </p>
+              <div className="aanmeld-done-actions">
+                <a className="btn btn-primary" href={mailHref}>Mail ons direct</a>
+                <button type="button" className="aanmeld-link" onClick={handleReset}>
+                  Nieuwe aanmelding
+                </button>
+              </div>
             </div>
           ) : (
-            <form onSubmit={submit} noValidate>
-              <div className="frow">
-                <div className={"field" + (errors.naam ? " err" : "")}>
-                  <label htmlFor="naam">Naam</label>
-                  <input id="naam" value={form.naam} onChange={(e) => set("naam", e.target.value)} placeholder="Voor- en achternaam" />
-                  {errors.naam && <span className="msg">{errors.naam}</span>}
-                </div>
-                <div className={"field" + (errors.tel ? " err" : "")}>
-                  <label htmlFor="tel">Telefoon</label>
-                  <input id="tel" value={form.tel} onChange={(e) => set("tel", e.target.value)} placeholder="06 12 34 56 78" inputMode="tel" />
-                  {errors.tel && <span className="msg">{errors.tel}</span>}
-                </div>
-              </div>
-              <div className={"field" + (errors.email ? " err" : "")}>
-                <label htmlFor="email">E-mail</label>
-                <input id="email" value={form.email} onChange={(e) => set("email", e.target.value)} placeholder="jij@email.nl" inputMode="email" />
-                {errors.email && <span className="msg">{errors.email}</span>}
-              </div>
-              <div className="field">
-                <label>Ik wil graag</label>
-                <div className="segmented">
-                  {types.map((t) => (
-                    <button type="button" key={t} className={form.type === t ? "on" : ""} onClick={() => set("type", t)}>{t}</button>
+            <form onSubmit={handleSubmit} noValidate aria-label="Aanmeldformulier">
+              <div className="aanmeld-head">
+                <ol className="aanmeld-steps" aria-label="Voortgang">
+                  {CONTACT_STEPS.map((label, i) => (
+                    <li
+                      key={label}
+                      className={"aanmeld-step-tab" + (i === step ? " active" : "") + (i < step ? " done" : "")}
+                      aria-current={i === step ? "step" : undefined}
+                    >
+                      <span className="aanmeld-step-num">
+                        {i < step ? <Icon name="check" size={14} stroke={3} /> : i + 1}
+                      </span>
+                      <span className="aanmeld-step-name">{label}</span>
+                    </li>
                   ))}
-                </div>
+                </ol>
               </div>
-              <div className="field">
-                <label htmlFor="bericht">Bericht <span style={{ fontWeight: 400, color: "var(--muted)" }}>(optioneel)</span></label>
-                <textarea id="bericht" value={form.bericht} onChange={(e) => set("bericht", e.target.value)} placeholder="Bijv. je woonplaats of wanneer je wilt starten" />
+
+              <div className="aanmeld-step" key={step}>
+                {step === 0 && (
+                  <>
+                    <h3 className="aanmeld-step-title">Waarvoor meld je je aan?</h3>
+                    <div className="aanmeld-opts" role="group" aria-label="Soort aanmelding">
+                      {CONTACT_TYPES.map((t) => {
+                        const active = form.type === t.value;
+                        return (
+                          <button
+                            type="button"
+                            key={t.value}
+                            className={"aanmeld-opt" + (active ? " on" : "")}
+                            aria-pressed={active}
+                            onClick={() => set("type", t.value)}
+                          >
+                            <span className="aanmeld-opt-radio" aria-hidden="true" />
+                            <span className="aanmeld-opt-body">
+                              <span className="aanmeld-opt-head">
+                                <span className="aanmeld-opt-title">{t.title}</span>
+                                {t.tag && <span className="aanmeld-opt-tag">{t.tag}</span>}
+                              </span>
+                              <span className="aanmeld-opt-desc">{t.desc}</span>
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                    {wantsLessons && (
+                      <fieldset className="aanmeld-fieldset">
+                        <legend>Voorkeur auto</legend>
+                        <div className="aanmeld-pills">
+                          {TRANSMISSIES.map((o) => (
+                            <button
+                              type="button"
+                              key={o}
+                              className={"aanmeld-pill" + (form.transmissie === o ? " on" : "")}
+                              aria-pressed={form.transmissie === o}
+                              onClick={() => set("transmissie", o)}
+                            >
+                              {o}
+                            </button>
+                          ))}
+                        </div>
+                      </fieldset>
+                    )}
+                  </>
+                )}
+
+                {step === 1 && (
+                  <>
+                    <h3 className="aanmeld-step-title">Jouw gegevens</h3>
+                    <div className={"aanmeld-field" + (errors.naam ? " err" : "")}>
+                      <label htmlFor="naam">Naam</label>
+                      <input id="naam" value={form.naam} onChange={(e) => set("naam", e.target.value)} placeholder="Voor- en achternaam" autoComplete="name" />
+                      {errors.naam && <span className="aanmeld-msg">{errors.naam}</span>}
+                    </div>
+                    <div className="aanmeld-frow">
+                      <div className={"aanmeld-field" + (errors.tel ? " err" : "")}>
+                        <label htmlFor="tel">Telefoon</label>
+                        <input id="tel" value={form.tel} onChange={(e) => set("tel", e.target.value)} placeholder="06 12 34 56 78" inputMode="tel" autoComplete="tel" />
+                        {errors.tel && <span className="aanmeld-msg">{errors.tel}</span>}
+                      </div>
+                      <div className={"aanmeld-field" + (errors.email ? " err" : "")}>
+                        <label htmlFor="email">E-mail</label>
+                        <input id="email" value={form.email} onChange={(e) => set("email", e.target.value)} placeholder="jij@email.nl" inputMode="email" autoComplete="email" />
+                        {errors.email && <span className="aanmeld-msg">{errors.email}</span>}
+                      </div>
+                    </div>
+                    <div className="aanmeld-field">
+                      <label htmlFor="plaats">Woonplaats <span className="aanmeld-opt-label">(optioneel)</span></label>
+                      <input id="plaats" value={form.plaats} onChange={(e) => set("plaats", e.target.value)} placeholder="Bijv. Rotterdam-Zuid" autoComplete="address-level2" />
+                    </div>
+                  </>
+                )}
+
+                {step === 2 && (
+                  <>
+                    <h3 className="aanmeld-step-title">Controleer en verstuur</h3>
+                    <dl className="aanmeld-review">
+                      {summaryRows.map(([label, value]) => (
+                        <div key={label} className="aanmeld-review-row">
+                          <dt>{label}</dt>
+                          <dd>{value}</dd>
+                        </div>
+                      ))}
+                    </dl>
+                    <div className="aanmeld-field">
+                      <label htmlFor="bericht">Bericht <span className="aanmeld-opt-label">(optioneel)</span></label>
+                      <textarea id="bericht" value={form.bericht} onChange={(e) => set("bericht", e.target.value)} placeholder="Bijv. wanneer je wilt starten" rows={4} />
+                    </div>
+                  </>
+                )}
               </div>
-              <button className="btn btn-primary" type="submit">
-                Verstuur aanmelding
-              </button>
+
+              <div className="aanmeld-actions">
+                {step > 0 ? (
+                  <button type="button" className="aanmeld-link" onClick={handleBack}>
+                    Terug
+                  </button>
+                ) : (
+                  <span />
+                )}
+                {isLastStep ? (
+                  <button type="submit" className="btn btn-primary">
+                    Verstuur aanmelding
+                  </button>
+                ) : (
+                  <button type="button" className="btn btn-primary" onClick={handleNext}>
+                    Volgende stap
+                  </button>
+                )}
+              </div>
             </form>
           )}
-        </div>
+        </Reveal>
       </div>
     </section>
   );
@@ -532,34 +742,53 @@ function Contact() {
    FOOTER
    ============================================================ */
 function Footer() {
+  const year = new Date().getFullYear();
   return (
     <footer className="footer">
-      <div className="wrap">
-        <div className="footer-top">
-          <div>
-            <a className="brand" href="#top"><span className="mark">C</span><span>Confiance<small>Rijschool · Rotterdam</small></span></a>
-            <p style={{ marginTop: "16px", maxWidth: "30ch", color: "rgba(255,255,255,.6)" }}>Leer rijden met vertrouwen in de regio Rotterdam. Start met een gratis proefles.</p>
+      <div className="wrap footer-inner">
+        <div className="footer-grid">
+          <div className="footer-brand">
+            <a className="footer-logo" href="#top" aria-label="Rijschool Confiance, naar boven">
+              <span className="footer-logo-mark" aria-hidden="true">L</span>
+              <span className="footer-logo-text">
+                <span className="footer-logo-name">Rijschool Confiance</span>
+                <span className="footer-logo-tag">Vertrouwen in het proces</span>
+              </span>
+            </a>
+            <p className="footer-about">
+              Persoonlijke rijlessen in de regio Rotterdam. Eén vaste, vertrouwde instructeur die je rustig en op jouw tempo naar je rijbewijs begeleidt.
+            </p>
           </div>
-          <div className="footer-cols">
-            <div>
-              <h5>Menu</h5>
-              <a href="#over">Over ons</a>
-              <a href="#lesgebied">Lesgebied</a>
-              <a href="#tarieven">Tarieven</a>
-              <a href="#pakketten">Pakketten</a>
-              <a href="#faq">FAQ</a>
-            </div>
-            <div>
-              <h5>Contact</h5>
-              <a href="tel:+31684346439">+31 6 84 34 64 39</a>
-              <a href="mailto:rijschoolconfiance@gmail.com">rijschoolconfiance@gmail.com</a>
-              <span className="fl">Regio Rotterdam</span>
+
+          <nav className="footer-col" aria-label="Footer navigatie">
+            <h5>Navigatie</h5>
+            <a href="#over">Over ons</a>
+            <a href="#lesgebied">Lesgebied</a>
+            <a href="#tarieven">Tarieven</a>
+            <a href="#reviews">Reviews</a>
+            <a href="#faq">Veelgestelde vragen</a>
+          </nav>
+
+          <div className="footer-col">
+            <h5>Contact</h5>
+            <a className="footer-contact" href="tel:+31684346439">
+              <span className="footer-contact-label">Telefoon</span>
+              <span className="footer-contact-value">06 84 34 64 39</span>
+            </a>
+            <a className="footer-contact" href="mailto:rijschoolconfiance@gmail.com">
+              <span className="footer-contact-label">E-mail</span>
+              <span className="footer-contact-value">rijschoolconfiance@gmail.com</span>
+            </a>
+            <div className="footer-contact">
+              <span className="footer-contact-label">Lesgebied</span>
+              <span className="footer-contact-value">Regio Rotterdam</span>
             </div>
           </div>
         </div>
+
         <div className="footer-bottom">
-          <span>© {new Date().getFullYear()} Rijschool Confiance</span>
-          <span>Rijden met vertrouwen 🚗</span>
+          <span>© {year} Rijschool Confiance — Alle rechten voorbehouden</span>
+          <span className="footer-motto">Rijden met vertrouwen</span>
         </div>
       </div>
     </footer>
@@ -638,11 +867,9 @@ function App() {
       <Nav />
       <main>
         <Hero title={t.heroTitle} sub={t.heroSub} />
-        <TrustBar />
         <Over />
         <Lesgebied />
         <Tarieven />
-        <Pakketten />
         <Reviews />
         <Faq />
         <Contact />
