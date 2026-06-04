@@ -1,0 +1,9 @@
+# Statische site: geen Node-app, alleen bestanden naar dist voor Coolify/nginx.
+[phases.setup]
+nixPkgs = ["nodejs_22"]
+
+[phases.build]
+cmds = ["npm run build"]
+
+[staticAssets]
+outputDir = "dist"

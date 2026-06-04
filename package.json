@@ -4,6 +4,7 @@
   "private": true,
   "description": "Rijschool Confiance — landingspagina (React via CDN + Babel in de browser).",
   "scripts": {
+    "build": "node scripts/build-dist.mjs",
     "dev": "live-server --port=8000 --entry-file=index.html",
     "start": "live-server --port=8000 --entry-file=index.html"
   },
