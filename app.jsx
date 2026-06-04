@@ -1,5 +1,5 @@
 /* ============================================================
-   Rijschool Confiance — app
+   Rijschool Confiance - app
    ============================================================ */
 const { useState, useEffect, useRef } = React;
 
@@ -482,16 +482,24 @@ function Faq() {
         <div className="faq-list">
           {FAQ.map((f, k) => {
             const isOpen = open === k;
+            const handleToggle = () => setOpen(isOpen ? -1 : k);
             return (
-              <Reveal className={"faq-item" + (isOpen ? " open" : "")} key={k} style={{ transitionDelay: (k * 0.04) + "s" }}>
-                <button className="faq-q" aria-expanded={isOpen} onClick={() => setOpen(isOpen ? -1 : k)}>
+              <div className={"faq-item" + (isOpen ? " open" : "")} key={k}>
+                <button
+                  type="button"
+                  className="faq-q"
+                  aria-expanded={isOpen}
+                  aria-controls={"faq-a-" + k}
+                  id={"faq-q-" + k}
+                  onClick={handleToggle}
+                >
                   {f.q}
-                  <span className="ico">{isOpen ? "−" : "+"}</span>
+                  <span className="ico" aria-hidden="true">{isOpen ? "−" : "+"}</span>
                 </button>
-                <div className="faq-a" style={{ maxHeight: isOpen ? "260px" : "0" }}>
+                <div className="faq-a" id={"faq-a-" + k} role="region" aria-labelledby={"faq-q-" + k}>
                   <div className="faq-a-inner">{f.a}</div>
                 </div>
-              </Reveal>
+              </div>
             );
           })}
         </div>
@@ -504,14 +512,13 @@ function Faq() {
    CONTACT / FORMULIER
    ============================================================ */
 const CONTACT_TYPES = [
-  { value: "Gratis proefles", title: "Gratis proefles", desc: "Maak vrijblijvend kennis — zonder verplichtingen.", tag: "Gratis" },
+  { value: "Gratis proefles", title: "Gratis proefles", desc: "Maak vrijblijvend kennis, zonder verplichtingen." },
   { value: "Losse rijlessen", title: "Losse rijlessen", desc: "Flexibel per les, 60 of 90 minuten." },
   { value: "Lespakket", title: "Lespakket", desc: "Voordelig en gericht richting je examen." },
   { value: "Een vraag", title: "Ik heb een vraag", desc: "Stel je vraag, we reageren snel." },
 ];
 const CONTACT_STEPS = ["Jouw keuze", "Gegevens", "Bevestigen"];
-const TRANSMISSIES = ["Schakelauto", "Automaat", "Weet ik nog niet"];
-const EMPTY_FORM = { type: "Gratis proefles", transmissie: "Schakelauto", naam: "", email: "", tel: "", plaats: "", bericht: "" };
+const EMPTY_FORM = { type: "Gratis proefles", naam: "", email: "", tel: "", plaats: "", bericht: "" };
 
 function Contact() {
   const [step, setStep] = useState(0);
@@ -524,7 +531,6 @@ function Contact() {
     setErrors((e) => (e[key] ? { ...e, [key]: undefined } : e));
   };
 
-  const wantsLessons = form.type === "Losse rijlessen" || form.type === "Lespakket";
   const isLastStep = step === CONTACT_STEPS.length - 1;
   const firstName = form.naam.trim().split(" ")[0] || "rijder";
 
@@ -568,13 +574,11 @@ function Contact() {
       "\nTelefoon: " + form.tel +
       "\nE-mail: " + form.email +
       (form.plaats ? "\nWoonplaats: " + form.plaats : "") +
-      (wantsLessons ? "\nVoorkeur: " + form.transmissie : "") +
       "\n\n" + form.bericht
     );
 
   const summaryRows = [
     ["Aanmelding", form.type],
-    wantsLessons && ["Voorkeur", form.transmissie],
     ["Naam", form.naam],
     ["Telefoon", form.tel],
     ["E-mail", form.email],
@@ -635,34 +639,13 @@ function Contact() {
                           >
                             <span className="aanmeld-opt-radio" aria-hidden="true" />
                             <span className="aanmeld-opt-body">
-                              <span className="aanmeld-opt-head">
-                                <span className="aanmeld-opt-title">{t.title}</span>
-                                {t.tag && <span className="aanmeld-opt-tag">{t.tag}</span>}
-                              </span>
+                              <span className="aanmeld-opt-title">{t.title}</span>
                               <span className="aanmeld-opt-desc">{t.desc}</span>
                             </span>
                           </button>
                         );
                       })}
                     </div>
-                    {wantsLessons && (
-                      <fieldset className="aanmeld-fieldset">
-                        <legend>Voorkeur auto</legend>
-                        <div className="aanmeld-pills">
-                          {TRANSMISSIES.map((o) => (
-                            <button
-                              type="button"
-                              key={o}
-                              className={"aanmeld-pill" + (form.transmissie === o ? " on" : "")}
-                              aria-pressed={form.transmissie === o}
-                              onClick={() => set("transmissie", o)}
-                            >
-                              {o}
-                            </button>
-                          ))}
-                        </div>
-                      </fieldset>
-                    )}
                   </>
                 )}
 
@@ -787,7 +770,7 @@ function Footer() {
         </div>
 
         <div className="footer-bottom">
-          <span>© {year} Rijschool Confiance — Alle rechten voorbehouden</span>
+          <span>© {year} Rijschool Confiance · Alle rechten voorbehouden</span>
           <span className="footer-motto">Rijden met vertrouwen</span>
         </div>
       </div>
@@ -829,7 +812,7 @@ function App() {
     }
   }, [t.stijl, t.accent, t.koppen]);
 
-  /* reveal-on-scroll — alleen inschakelen als animatieframes echt draaien,
+  /* reveal-on-scroll - alleen inschakelen als animatieframes echt draaien,
      anders blijft alles gewoon zichtbaar (basisstijl). */
   useEffect(() => {
     let frames = 0;

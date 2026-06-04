@@ -2,7 +2,7 @@
   "name": "rijschool-confiance",
   "version": "1.0.0",
   "private": true,
-  "description": "Rijschool Confiance — landingspagina (React via CDN + Babel in de browser).",
+  "description": "Rijschool Confiance - landingspagina (React via CDN + Babel in de browser).",
   "scripts": {
     "build": "node scripts/build-dist.mjs",
     "dev": "live-server --port=8000 --entry-file=index.html",
