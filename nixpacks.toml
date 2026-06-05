@@ -1,9 +1,19 @@
 # Node-server: serveert de statische site en verstuurt aanmeldingen via Resend.
+#
+# Coolify-instellingen (General):
+#   - Is it a static site?  → UIT
+#   - Publish Directory     → LEEG (niet /dist)
+#   - Start Command         → node server.js  (of leeg; nixpacks.toml regelt dit)
+#   - Ports Exposes         → 3000
+#   - RESEND_API_KEY        → verplicht in Environment Variables
 [phases.setup]
 nixPkgs = ["nodejs_22"]
 
 [phases.install]
 cmds = ["npm ci --omit=dev"]
+
+[variables]
+NIXPACKS_SPA_CADDY = "false"
 
 [start]
 cmd = "node server.js"
