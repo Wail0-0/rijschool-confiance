@@ -41,7 +41,7 @@ const GESLAAGD_PHOTOS = [
 ];
 
 const WHATSAPP_URL =
-  "https://wa.me/31684346439" +
+  "https://wa.me/31684346439?text=" +
   encodeURIComponent(
     "Hallo! Ik zou graag een proefles willen inplannen. Wanneer zou ik kunnen beginnen?"
   );
