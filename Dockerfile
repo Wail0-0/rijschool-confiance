@@ -1,8 +1,13 @@
-FROM nginx:alpine
+FROM node:22-alpine
 
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-COPY index.html styles.css app.jsx icons.jsx tweaks-panel.jsx image-slot.js /usr/share/nginx/html/
-COPY images/ /usr/share/nginx/html/images/
+WORKDIR /app
 
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+COPY package.json package-lock.json ./
+RUN npm ci --omit=dev
+
+COPY . .
+
+ENV PORT=3000
+EXPOSE 3000
+
+CMD ["node", "server.js"]

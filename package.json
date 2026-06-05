@@ -2,11 +2,16 @@
   "name": "rijschool-confiance",
   "version": "1.0.0",
   "private": true,
-  "description": "Rijschool Confiance - landingspagina (React via CDN + Babel in de browser).",
+  "type": "module",
+  "description": "Rijschool Confiance - landingspagina (React via CDN + Babel in de browser) met Node-server voor het aanmeldformulier.",
   "scripts": {
     "build": "node scripts/build-dist.mjs",
-    "dev": "live-server --port=8000 --entry-file=index.html",
-    "start": "live-server --port=8000 --entry-file=index.html"
+    "start": "node server.js",
+    "dev": "live-server --port=8000 --entry-file=index.html"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "resend": "^4.0.1"
   },
   "devDependencies": {
     "live-server": "^1.2.2"

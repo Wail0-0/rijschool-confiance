@@ -4,6 +4,25 @@
 const { useState, useEffect, useRef } = React;
 
 /* ---------- content data ---------- */
+const GOOGLE_REVIEW_COUNT = 17;
+
+const GOOGLE_REVIEWS = [
+  { name: "michano ramdjielal", text: "Zeer goeie rijschool. Komt afspraken na.", when: "een jaar geleden" },
+  { name: "One Drive", text: "Top gozer! Goeie samenwerking gehad.", when: "een jaar geleden" },
+  { name: "Bilal Cho", text: "Een jonge, maar toch ervaren instructeur. Werkt geduldig en is sterk in zijn vak. Een echte aanrader!", when: "een jaar geleden" },
+  { name: "Divano Zandgrond", text: "Eindelijk mijn rijbewijs behaald! Hele fijne rijschool en betaalbaar!", when: "2 jaar geleden" },
+  { name: "Ayoub C", text: "Zeker tevreden over rijschool Confiance. Er wordt duidelijk gecommuniceerd tijdens de lessen waardoor ik alles snel oppikte, hierdoor ook mijn rijbewijs binnen korte periode behaald. Zeker een aanrader!", when: "2 jaar geleden" },
+  { name: "Noortje B", text: "Echt een aanrader! Super goeie duidelijke lessen gehad! Top rijschool.", when: "2 jaar geleden" },
+  { name: "Speedy E", text: "Top rijschool, heb mijn rijbewijs in een keer gehaald. Duidelijke uitleg en instructies — waar je vastloopt weet de rijinstructeur altijd een goede oplossing.", when: "2 jaar geleden" },
+  { name: "Zakaria El Haddioui", text: "In 1x mijn rijbewijs gehaald, rij instructeur geeft goed les en advies. Echt een aanrader! Als je je rijbewijs snel wilt halen, les bij Confiance.", when: "2 jaar geleden" },
+  { name: "Ilias Aouladzian", text: "Om met één woord Rijschool Confiance te beschrijven: top! De instructeurs leveren hele goede diensten. Ze hebben mij tot aan de kleinste details opgeleid om in één keer te slagen. Dikke aanrader!", when: "2 jaar geleden" },
+  { name: "ayoub ouh", text: "Bedankt voor het helpen behalen van rijbewijs. Zonder jouw hulp zou ik het niet zo snel hebben gehaald.", when: "2 jaar geleden" },
+  { name: "Jaouad el Arkoubi", text: "Top rijschool! Al na een paar lessen mijn rijbewijs gehaald. Rij-instructeur is duidelijk en heeft een goed plan van aanpak. Goeie aanrader.", when: "2 jaar geleden" },
+  { name: "anass hadioui", text: "Fijne instructeur! Werkt duidelijk en volgens een strakke planning.", when: "2 jaar geleden" },
+  { name: "achmed jan", text: "Dankzij Rijschool Confiance in één keer geslaagd voor mijn praktijkexamen. Dankjewel voor de fijne, leerzame en betrouwbare omgeving!", when: "2 jaar geleden" },
+  { name: "Ibrahim B", text: "Kwalitatieve rijschool! In één keer mijn rijbewijs gehaald. Aardige rij-instructeur die op een gestructureerde, educatieve manier zijn rijlessen geeft.", when: "2 jaar geleden" },
+];
+
 const GESLAAGD_PHOTOS = [
   "images/geslaagd/505117845_18013138370746836_4240643234952017786_n.jpg",
   "images/geslaagd/505499879_18013138052746836_4856793965508230546_n.jpg",
@@ -21,12 +40,19 @@ const GESLAAGD_PHOTOS = [
   "images/geslaagd/703298290_18051672371746836_6290228324899031866_n.jpg",
 ];
 
+const WHATSAPP_URL =
+  "https://web.whatsapp.com/send?phone=31684346439&text=" +
+  encodeURIComponent(
+    "Hallo! Ik zou graag een proefles willen inplannen. Wanneer zou ik kunnen beginnen?"
+  );
+
 const FAQ = [
-  { q: "Is de proefles echt gratis?", a: "Ja! Je eerste les van 60 minuten is volledig gratis en vrijblijvend. Zo ervaar je rustig hoe het rijden bevalt en of het klikt met je instructeur, zonder verplichtingen." },
-  { q: "In welke regio geven jullie les?", a: "We lessen in heel groot-Rotterdam: van Centrum en Rotterdam-Zuid tot Kralingen, Charlois, Schiedam, Capelle en omliggende gemeenten. Twijfel je over jouw plaats? Stuur een berichtje, we kijken altijd mee." },
-  { q: "Lessen jullie in een schakelauto of automaat?", a: "Onze lessen zijn standaard in een schakelauto. Wil je liever in een automaat rijden? Geef het aan bij je aanmelding, dan bespreken we de mogelijkheden." },
-  { q: "Wat kost een rijles?", a: "Een losse les van 60 minuten kost €50 en een les van 90 minuten €75. Met een pakket les je voordeliger. De gratis proefles staat hier los van." },
-  { q: "Hoe zit het met de tussentijdse toets en het examen?", a: "We bieden begeleiding richting de tussentijdse toets en het praktijkexamen, inclusief je vertrouwde lesauto bij het CBR. De examenkosten van het CBR zelf betaal je apart aan het CBR." },
+  { q: "Is de proefles echt gratis?", a: "Ja! Je eerste les van 60 minuten is volledig gratis en vrijblijvend. Zo ervaar je rustig hoe het rijden bevalt in Rotterdam en of het klikt met je instructeur, zonder verplichtingen." },
+  { q: "In welke wijken en gemeenten geven jullie rijles?", a: "We zijn een rijschool voor heel Rotterdam en de directe Rijnmond-regio: van Centrum en Rotterdam-Zuid tot Kralingen, Charlois, Delfshaven, Hillegersberg, Prins Alexander, Schiedam, Capelle aan den IJssel en Vlaardingen. Twijfel je over jouw adres? Stuur een berichtje, we kijken altijd mee." },
+  { q: "Lessen jullie in schakel- of automaat?", a: "Ja, we bieden rijlessen in zowel schakel- als automaat. Kies de auto die bij jouw plannen past. Automaatlessen zijn €5 duurder per losse les en €100 duurder per lespakket." },
+  { q: "Wat kost een rijles in Rotterdam?", a: "Een losse les van 60 minuten kost €55 (schakel) of €60 (automaat). Een les van 90 minuten kost €75 of €80. Met een lespakket rijd je voordeliger richting je praktijkexamen. De gratis proefles staat hier los van." },
+  { q: "Hoe zit het met de tussentijdse toets en het CBR-examen?", a: "We begeleiden je richting de tussentijdse toets en het praktijkexamen bij CBR Rotterdam, inclusief je vertrouwde lesauto. De examenkosten van het CBR betaal je apart aan het CBR." },
+  { q: "Waar halen jullie op voor de rijles?", a: "We halen je op in je eigen buurt in Rotterdam of de Rijnmond, zodat je direct oefent op straten en routes die je dagelijks tegenkomt en die relevant zijn voor het examen." },
   { q: "Hoe kan ik betalen?", a: "Je kunt per les of per pakket betalen. We stemmen samen een ritme af dat bij jou past, daar maken we het graag makkelijk in." },
 ];
 
@@ -191,7 +217,7 @@ function Hero({ title, sub }) {
     "Lessen op jouw tempo, zonder druk",
   ];
   return (
-    <section className="hero section-pad" id="top" aria-label="Intro">
+    <section className="hero section-pad" id="top" aria-label="Rijschool Rotterdam — intro">
       <div className="wrap hero-inner">
         <div className="hero-copy">
           <Reveal as="h1" style={{ transitionDelay: ".05s" }}
@@ -247,6 +273,11 @@ function Over() {
             Bij Rijschool Confiance draait alles om rust en vertrouwen. We leren je niet alleen
             slagen voor je examen, maar zelfstandig en veilig rijden in en rond Rotterdam, voor de rest van je leven.
           </Reveal>
+          <Reveal as="p" style={{ color: "var(--muted)", fontSize: "1.05rem", marginTop: "14px" }}>
+            Je rijdt met dezelfde lesauto en dezelfde instructeur van je eerste proefles tot je examen bij
+            CBR Rotterdam. We oefenen bewust op routes en verkeerssituaties die examinatoren in Rotterdam vaak
+            laten zien — van drukke kruispunten in Charlois tot invoegen op de ring richting Schiedam.
+          </Reveal>
           <div className="feature-list">
             {feats.map((f, k) => (
               <Reveal className="fi" key={k} style={{ transitionDelay: (k * 0.06) + "s" }}>
@@ -296,32 +327,81 @@ function Lesgebied() {
 /* ============================================================
    TARIEVEN
    ============================================================ */
+const TRANSMISSIE_OPTS = [
+  { value: "schakel", label: "Schakel" },
+  { value: "automaat", label: "Automaat" },
+];
+
+const PAKKET_BASE = [
+  {
+    tag: "Zilveren pakket", base: 1320,
+    desc: "Een stevige basis om vol vertrouwen op te bouwen richting je examen.",
+    feat: false,
+    list: ["20 rijlessen", "Inclusief praktijkexamen", "Vaste, vertrouwde instructeur"],
+  },
+  {
+    tag: "Gouden pakket", base: 1800,
+    desc: "Onze meest gekozen optie: ruim de tijd om alles goed onder de knie te krijgen.",
+    feat: true,
+    list: ["30 rijlessen", "Inclusief praktijkexamen", "Ideaal voor de meeste leerlingen"],
+  },
+  {
+    tag: "Diamanten pakket", base: 2250,
+    desc: "Alle ruimte en rust, zonder zorgen over extra lessen tot je er klaar voor bent.",
+    feat: false,
+    list: ["40 rijlessen", "Inclusief praktijkexamen", "Maximale voorbereiding"],
+  },
+];
+
+const LOSSE_BASE = [
+  { naam: "Losse les", per: "60 minuten", base: 55, automaatExtra: true },
+  { naam: "Losse les", per: "90 minuten", base: 75, automaatExtra: true },
+  { naam: "Los examen", per: "praktijkexamen", base: 350, automaatExtra: false },
+];
+
+const formatEuro = (n) => "€" + n;
+
+function TransmissieToggle({ value, onChange, id, block = false }) {
+  return (
+    <div
+      className={"transmissie-toggle" + (block ? " transmissie-toggle--block" : "")}
+      role="group"
+      aria-label="Schakel of automaat"
+      id={id}
+    >
+      {TRANSMISSIE_OPTS.map((o) => {
+        const active = value === o.value;
+        return (
+          <button
+            type="button"
+            key={o.value}
+            className={"transmissie-btn" + (active ? " on" : "")}
+            aria-pressed={active}
+            onClick={() => onChange(o.value)}
+          >
+            {o.label}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
 function Tarieven() {
-  const cards = [
-    {
-      tag: "Zilveren pakket", val: "€1320",
-      desc: "Een stevige basis om vol vertrouwen op te bouwen richting je examen.",
-      feat: false,
-      list: ["20 rijlessen", "Inclusief praktijkexamen", "Vaste, vertrouwde instructeur"],
-    },
-    {
-      tag: "Gouden pakket", val: "€1800",
-      desc: "Onze meest gekozen optie: ruim de tijd om alles goed onder de knie te krijgen.",
-      feat: true,
-      list: ["30 rijlessen", "Inclusief praktijkexamen", "Ideaal voor de meeste leerlingen"],
-    },
-    {
-      tag: "Diamanten pakket", val: "€2250",
-      desc: "Alle ruimte en rust, zonder zorgen over extra lessen tot je er klaar voor bent.",
-      feat: false,
-      list: ["40 rijlessen", "Inclusief praktijkexamen", "Maximale voorbereiding"],
-    },
-  ];
-  const losse = [
-    { naam: "Losse les", per: "60 minuten", val: "€55" },
-    { naam: "Losse les", per: "90 minuten", val: "€75" },
-    { naam: "Los examen", per: "praktijkexamen", val: "€350" },
-  ];
+  const [transmissie, setTransmissie] = useState("schakel");
+  const isAutomaat = transmissie === "automaat";
+  const pakketExtra = isAutomaat ? 100 : 0;
+  const losseExtra = isAutomaat ? 5 : 0;
+
+  const cards = PAKKET_BASE.map((c) => ({
+    ...c,
+    val: formatEuro(c.base + pakketExtra),
+  }));
+  const losse = LOSSE_BASE.map((l) => ({
+    ...l,
+    val: formatEuro(l.base + (l.automaatExtra ? losseExtra : 0)),
+  }));
+
   return (
     <section className="section-pad band-light" id="tarieven">
       <div className="wrap">
@@ -329,6 +409,10 @@ function Tarieven() {
           <span className="eyebrow" style={{ justifyContent: "center" }}>Tarieven</span>
           <h2>Heldere prijzen, geen verrassingen</h2>
           <p>Kies het pakket dat bij je past. Je start altijd met een gratis proefles.</p>
+        </Reveal>
+        <Reveal className="tarieven-transmissie">
+          <span className="tarieven-transmissie-label">Schakel of automaat?</span>
+          <TransmissieToggle value={transmissie} onChange={setTransmissie} />
         </Reveal>
         <div className="price-grid">
           {cards.map((c, k) => (
@@ -368,6 +452,60 @@ function Tarieven() {
 /* ============================================================
    REVIEWS
    ============================================================ */
+function ReviewCarousel() {
+  const scrollerRef = useRef(null);
+
+  const handleScroll = (dir) => {
+    const el = scrollerRef.current;
+    if (!el) return;
+    const card = el.querySelector(".review-card");
+    const gap = 18;
+    const step = card ? card.offsetWidth + gap : 320;
+    el.scrollBy({ left: dir * step, behavior: "smooth" });
+  };
+
+  return (
+    <div className="reviews-block">
+      <div className="reviews-block-head">
+        <h3 className="reviews-block-title">Wat leerlingen zeggen op Google</h3>
+        <div className="reviews-nav" aria-label="Reviews navigeren">
+          <button
+            type="button"
+            className="reviews-nav-btn"
+            aria-label="Vorige review"
+            onClick={() => handleScroll(-1)}
+          >
+            ‹
+          </button>
+          <button
+            type="button"
+            className="reviews-nav-btn"
+            aria-label="Volgende review"
+            onClick={() => handleScroll(1)}
+          >
+            ›
+          </button>
+        </div>
+      </div>
+      <div className="reviews-carousel" ref={scrollerRef} aria-label="Google reviews van leerlingen">
+        {GOOGLE_REVIEWS.map((review, i) => (
+          <article className="review-card" key={review.name + "-" + i}>
+            <div className="review-card-top">
+              <Stars n={5} />
+              <GoogleG size={18} />
+            </div>
+            <blockquote className="review-card-text">"{review.text}"</blockquote>
+            <footer className="review-card-foot">
+              <cite className="review-card-name">{review.name}</cite>
+              <span className="review-card-when">{review.when}</span>
+            </footer>
+          </article>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function Reviews() {
   const track = [...GESLAAGD_PHOTOS, ...GESLAAGD_PHOTOS];
   const scrollerRef = useRef(null);
@@ -448,16 +586,27 @@ function Reviews() {
                 <span className="num">5,0</span>
                 <Stars n={5} />
               </div>
-              <small>Beoordeling op Google</small>
+              <small>5,0 · {GOOGLE_REVIEW_COUNT} reviews op Google</small>
+              <a
+                className="rev-google-link"
+                href="https://www.google.com/maps/search/?api=1&query=Rijschool+Confiance+Watergeusstraat+28E+Rotterdam"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Bekijk reviews op Google
+              </a>
             </div>
           </div>
+        </Reveal>
+        <Reveal>
+          <ReviewCarousel />
         </Reveal>
       </div>
       <div className="geslaagd-marquee" ref={scrollerRef} aria-label="Foto's van geslaagde leerlingen">
         <div className="geslaagd-track">
           {track.map((src, k) => (
             <figure className="geslaagd-item" key={src + "-" + k}>
-              <img src={src} alt="Geslaagde leerling bij Rijschool Confiance" loading="lazy" decoding="async" draggable="false" />
+              <img src={src} alt={"Geslaagde leerling rijschool Rotterdam — Rijschool Confiance " + (k % GESLAAGD_PHOTOS.length + 1)} loading="lazy" decoding="async" draggable="false" />
             </figure>
           ))}
         </div>
@@ -512,57 +661,93 @@ function Faq() {
    CONTACT / FORMULIER
    ============================================================ */
 const CONTACT_TYPES = [
-  { value: "Gratis proefles", title: "Gratis proefles", desc: "Maak vrijblijvend kennis, zonder verplichtingen." },
-  { value: "Losse rijlessen", title: "Losse rijlessen", desc: "Flexibel per les, 60 of 90 minuten." },
-  { value: "Lespakket", title: "Lespakket", desc: "Voordelig en gericht richting je examen." },
-  { value: "Een vraag", title: "Ik heb een vraag", desc: "Stel je vraag, we reageren snel." },
+  { value: "Gratis proefles", title: "Gratis proefles", icon: "car" },
+  { value: "Losse rijlessen", title: "Losse rijlessen", icon: "clock" },
+  { value: "Lespakket", title: "Lespakket", icon: "award" },
+  { value: "Een vraag", title: "Ik heb een vraag", icon: "smile" },
 ];
-const CONTACT_STEPS = ["Jouw keuze", "Gegevens", "Bevestigen"];
-const EMPTY_FORM = { type: "Gratis proefles", naam: "", email: "", tel: "", plaats: "", bericht: "" };
+const ASIDE_POINTS = [
+  "Je eerste proefles van 60 minuten is gratis",
+  "Eén vaste, vertrouwde instructeur",
+  "Lessen in schakel én automaat",
+  "Meestal binnen 24 uur een reactie",
+];
+const ASIDE_QUOTE = {
+  text: "Eindelijk mijn rijbewijs behaald! Hele fijne rijschool en betaalbaar!",
+  name: "Divano Zandgrond",
+};
+const EMPTY_FORM = { type: "Gratis proefles", transmissie: "schakel", naam: "", email: "", tel: "", plaats: "", bericht: "" };
 
 function Contact() {
-  const [step, setStep] = useState(0);
   const [form, setForm] = useState(EMPTY_FORM);
   const [errors, setErrors] = useState({});
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [sendError, setSendError] = useState("");
+  const honeypotRef = useRef(null);
 
   const set = (key, value) => {
     setForm((f) => ({ ...f, [key]: value }));
     setErrors((e) => (e[key] ? { ...e, [key]: undefined } : e));
   };
 
-  const isLastStep = step === CONTACT_STEPS.length - 1;
   const firstName = form.naam.trim().split(" ")[0] || "rijder";
 
-  const validateDetails = () => {
+  const validate = () => {
     const e = {};
     if (!form.naam.trim()) e.naam = "Vul je naam in";
-    if (!/^\S+@\S+\.\S+$/.test(form.email)) e.email = "Vul een geldig e-mailadres in";
     if (!form.tel.trim() || form.tel.replace(/\D/g, "").length < 8) e.tel = "Vul je telefoonnummer in";
+    if (!/^\S+@\S+\.\S+$/.test(form.email)) e.email = "Vul een geldig e-mailadres in";
     setErrors(e);
-    return Object.keys(e).length === 0;
+    return e;
   };
 
-  const handleNext = () => {
-    if (step === 1 && !validateDetails()) return;
-    setStep((s) => Math.min(s + 1, CONTACT_STEPS.length - 1));
-  };
-  const handleBack = () => setStep((s) => Math.max(s - 1, 0));
-
-  const handleSubmit = (ev) => {
+  const handleSubmit = async (ev) => {
     ev.preventDefault();
-    if (!validateDetails()) {
-      setStep(1);
+    if (sending) return;
+    const found = validate();
+    const firstError = Object.keys(found)[0];
+    if (firstError) {
+      const el = document.getElementById(firstError);
+      if (el) el.focus();
       return;
     }
-    setSent(true);
+    setSending(true);
+    setSendError("");
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: form.type,
+          transmissie: form.transmissie,
+          naam: form.naam,
+          email: form.email,
+          tel: form.tel,
+          plaats: form.plaats,
+          bericht: form.bericht,
+          company: honeypotRef.current ? honeypotRef.current.value : "",
+        }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data.ok) {
+        throw new Error(data.error || "Versturen mislukt.");
+      }
+      setSent(true);
+    } catch (err) {
+      setSendError(
+        "Versturen lukte niet. Probeer het opnieuw of mail ons direct via de knop hieronder."
+      );
+    } finally {
+      setSending(false);
+    }
   };
 
   const handleReset = () => {
     setForm(EMPTY_FORM);
     setErrors({});
-    setStep(0);
     setSent(false);
+    setSendError("");
   };
 
   const mailHref =
@@ -574,150 +759,213 @@ function Contact() {
       "\nTelefoon: " + form.tel +
       "\nE-mail: " + form.email +
       (form.plaats ? "\nWoonplaats: " + form.plaats : "") +
+      "\nAuto: " + (form.transmissie === "automaat" ? "Automaat" : "Schakel") +
       "\n\n" + form.bericht
     );
 
-  const summaryRows = [
-    ["Aanmelding", form.type],
-    ["Naam", form.naam],
-    ["Telefoon", form.tel],
-    ["E-mail", form.email],
-    form.plaats && ["Woonplaats", form.plaats],
-  ].filter(Boolean);
-
   return (
     <section className="section-pad band-muted" id="contact">
-      <div className="wrap aanmeld-wrap">
-        <Reveal className="aanmeld-card">
-          {sent ? (
-            <div className="aanmeld-done">
-              <span className="aanmeld-done-mark"><Icon name="check" size={26} stroke={2.5} /></span>
-              <h3>Bedankt, {firstName}</h3>
-              <p>
-                We nemen snel contact met je op over je <strong>{form.type.toLowerCase()}</strong>.
+      <div className="wrap">
+        <div className="aanmeld-layout">
+          <Reveal as="aside" className="aanmeld-aside">
+            <div className="aanmeld-aside-glow" aria-hidden="true" />
+            <div className="aanmeld-aside-top">
+              <span className="eyebrow aanmeld-aside-eyebrow">Aanmelden</span>
+              <h2 className="aanmeld-aside-title">Plan je gratis proefles</h2>
+              <p className="aanmeld-aside-lead">
+                Laat je gegevens achter, dan plannen we samen een vrijblijvende proefles in.
+                Geen verplichtingen, gewoon kennismaken achter het stuur.
               </p>
-              <div className="aanmeld-done-actions">
-                <a className="btn btn-primary" href={mailHref}>Mail ons direct</a>
-                <button type="button" className="aanmeld-link" onClick={handleReset}>
-                  Nieuwe aanmelding
-                </button>
+            </div>
+
+            <ul className="aanmeld-aside-points">
+              {ASIDE_POINTS.map((p) => (
+                <li key={p}>
+                  <span className="aanmeld-aside-check" aria-hidden="true">
+                    <Icon name="check" size={14} stroke={3} />
+                  </span>
+                  {p}
+                </li>
+              ))}
+            </ul>
+
+            <figure className="aanmeld-aside-quote">
+              <Stars n={5} />
+              <blockquote>"{ASIDE_QUOTE.text}"</blockquote>
+              <figcaption>
+                <GoogleG size={16} />
+                {ASIDE_QUOTE.name}
+              </figcaption>
+            </figure>
+
+            <div className="aanmeld-aside-foot">
+              <a className="aanmeld-aside-contact" href="tel:+31684346439">
+                <Icon name="phone" size={18} stroke={2} />
+                <span>06 84 34 64 39</span>
+              </a>
+              <div className="aanmeld-aside-rating">
+                <GoogleG size={20} />
+                <span><strong>5,0</strong> <Stars n={5} /></span>
+                <small>{GOOGLE_REVIEW_COUNT} reviews</small>
               </div>
             </div>
-          ) : (
-            <form onSubmit={handleSubmit} noValidate aria-label="Aanmeldformulier">
-              <div className="aanmeld-head">
-                <ol className="aanmeld-steps" aria-label="Voortgang">
-                  {CONTACT_STEPS.map((label, i) => (
-                    <li
-                      key={label}
-                      className={"aanmeld-step-tab" + (i === step ? " active" : "") + (i < step ? " done" : "")}
-                      aria-current={i === step ? "step" : undefined}
-                    >
-                      <span className="aanmeld-step-num">
-                        {i < step ? <Icon name="check" size={14} stroke={3} /> : i + 1}
-                      </span>
-                      <span className="aanmeld-step-name">{label}</span>
-                    </li>
-                  ))}
-                </ol>
+          </Reveal>
+
+          <Reveal className="aanmeld-card">
+            {sent ? (
+              <div className="aanmeld-done">
+                <span className="aanmeld-done-mark"><Icon name="check" size={30} stroke={2.5} /></span>
+                <h3>Bedankt, {firstName}!</h3>
+                <p>
+                  We hebben je aanvraag goed ontvangen en nemen snel contact met je op over je{" "}
+                  <strong>{form.type.toLowerCase()}</strong>.
+                </p>
+                <div className="aanmeld-done-actions">
+                  <a className="btn btn-primary" href={mailHref}>
+                    Mail ons direct
+                    <Icon name="arrow" size={18} />
+                  </a>
+                  <button type="button" className="aanmeld-link" onClick={handleReset}>
+                    Nieuwe aanmelding
+                  </button>
+                </div>
               </div>
+            ) : (
+              <form onSubmit={handleSubmit} noValidate aria-label="Aanmeldformulier" className="aanmeld-form">
+                <input
+                  ref={honeypotRef}
+                  type="text"
+                  name="company"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  aria-hidden="true"
+                  className="aanmeld-hp"
+                />
 
-              <div className="aanmeld-step" key={step}>
-                {step === 0 && (
-                  <>
-                    <h3 className="aanmeld-step-title">Waarvoor meld je je aan?</h3>
-                    <div className="aanmeld-opts" role="group" aria-label="Soort aanmelding">
-                      {CONTACT_TYPES.map((t) => {
-                        const active = form.type === t.value;
-                        return (
-                          <button
-                            type="button"
-                            key={t.value}
-                            className={"aanmeld-opt" + (active ? " on" : "")}
-                            aria-pressed={active}
-                            onClick={() => set("type", t.value)}
-                          >
-                            <span className="aanmeld-opt-radio" aria-hidden="true" />
-                            <span className="aanmeld-opt-body">
-                              <span className="aanmeld-opt-title">{t.title}</span>
-                              <span className="aanmeld-opt-desc">{t.desc}</span>
-                            </span>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </>
-                )}
+                <div className="aanmeld-group">
+                  <span className="aanmeld-group-label">Waarvoor meld je je aan?</span>
+                  <div className="aanmeld-types" role="group" aria-label="Soort aanmelding">
+                    {CONTACT_TYPES.map((t) => {
+                      const active = form.type === t.value;
+                      return (
+                        <button
+                          type="button"
+                          key={t.value}
+                          className={"aanmeld-type" + (active ? " on" : "")}
+                          aria-pressed={active}
+                          onClick={() => set("type", t.value)}
+                        >
+                          <span className="aanmeld-type-ico" aria-hidden="true">
+                            <Icon name={t.icon} size={24} stroke={2} />
+                          </span>
+                          <span className="aanmeld-type-title">{t.title}</span>
+                          <span className="aanmeld-type-check" aria-hidden="true">
+                            <Icon name="check" size={12} stroke={3} />
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
 
-                {step === 1 && (
-                  <>
-                    <h3 className="aanmeld-step-title">Jouw gegevens</h3>
-                    <div className={"aanmeld-field" + (errors.naam ? " err" : "")}>
-                      <label htmlFor="naam">Naam</label>
+                <div className="aanmeld-group">
+                  <span className="aanmeld-group-label">Schakel of automaat?</span>
+                  <TransmissieToggle
+                    value={form.transmissie}
+                    onChange={(v) => set("transmissie", v)}
+                    block
+                  />
+                </div>
+
+                <hr className="aanmeld-divider" />
+
+                <div className="aanmeld-fields">
+                  <div className={"aanmeld-field" + (errors.naam ? " err" : "")}>
+                    <label htmlFor="naam">Naam</label>
+                    <div className="aanmeld-input">
+                      <span className="aanmeld-input-ico" aria-hidden="true"><Icon name="user" size={18} stroke={2} /></span>
                       <input id="naam" value={form.naam} onChange={(e) => set("naam", e.target.value)} placeholder="Voor- en achternaam" autoComplete="name" />
-                      {errors.naam && <span className="aanmeld-msg">{errors.naam}</span>}
                     </div>
-                    <div className="aanmeld-frow">
-                      <div className={"aanmeld-field" + (errors.tel ? " err" : "")}>
-                        <label htmlFor="tel">Telefoon</label>
+                    {errors.naam && <span className="aanmeld-msg">{errors.naam}</span>}
+                  </div>
+
+                  <div className="aanmeld-frow">
+                    <div className={"aanmeld-field" + (errors.tel ? " err" : "")}>
+                      <label htmlFor="tel">Telefoon</label>
+                      <div className="aanmeld-input">
+                        <span className="aanmeld-input-ico" aria-hidden="true"><Icon name="phone" size={17} stroke={2} /></span>
                         <input id="tel" value={form.tel} onChange={(e) => set("tel", e.target.value)} placeholder="06 12 34 56 78" inputMode="tel" autoComplete="tel" />
-                        {errors.tel && <span className="aanmeld-msg">{errors.tel}</span>}
                       </div>
-                      <div className={"aanmeld-field" + (errors.email ? " err" : "")}>
-                        <label htmlFor="email">E-mail</label>
-                        <input id="email" value={form.email} onChange={(e) => set("email", e.target.value)} placeholder="jij@email.nl" inputMode="email" autoComplete="email" />
-                        {errors.email && <span className="aanmeld-msg">{errors.email}</span>}
-                      </div>
+                      {errors.tel && <span className="aanmeld-msg">{errors.tel}</span>}
                     </div>
-                    <div className="aanmeld-field">
-                      <label htmlFor="plaats">Woonplaats <span className="aanmeld-opt-label">(optioneel)</span></label>
+                    <div className={"aanmeld-field" + (errors.email ? " err" : "")}>
+                      <label htmlFor="email">E-mail</label>
+                      <div className="aanmeld-input">
+                        <span className="aanmeld-input-ico" aria-hidden="true"><Icon name="mail" size={17} stroke={2} /></span>
+                        <input id="email" value={form.email} onChange={(e) => set("email", e.target.value)} placeholder="jij@email.nl" inputMode="email" autoComplete="email" />
+                      </div>
+                      {errors.email && <span className="aanmeld-msg">{errors.email}</span>}
+                    </div>
+                  </div>
+
+                  <div className="aanmeld-field">
+                    <label htmlFor="plaats">Woonplaats <span className="aanmeld-opt-label">(optioneel)</span></label>
+                    <div className="aanmeld-input">
+                      <span className="aanmeld-input-ico" aria-hidden="true"><Icon name="pin" size={17} stroke={2} /></span>
                       <input id="plaats" value={form.plaats} onChange={(e) => set("plaats", e.target.value)} placeholder="Bijv. Rotterdam-Zuid" autoComplete="address-level2" />
                     </div>
-                  </>
+                  </div>
+
+                  <div className="aanmeld-field">
+                    <label htmlFor="bericht">Bericht <span className="aanmeld-opt-label">(optioneel)</span></label>
+                    <textarea id="bericht" value={form.bericht} onChange={(e) => set("bericht", e.target.value)} placeholder="Bijv. wanneer je wilt starten of een vraag" rows={3} />
+                  </div>
+                </div>
+
+                {sendError && (
+                  <p className="aanmeld-senderror" role="alert">{sendError}</p>
                 )}
 
-                {step === 2 && (
-                  <>
-                    <h3 className="aanmeld-step-title">Controleer en verstuur</h3>
-                    <dl className="aanmeld-review">
-                      {summaryRows.map(([label, value]) => (
-                        <div key={label} className="aanmeld-review-row">
-                          <dt>{label}</dt>
-                          <dd>{value}</dd>
-                        </div>
-                      ))}
-                    </dl>
-                    <div className="aanmeld-field">
-                      <label htmlFor="bericht">Bericht <span className="aanmeld-opt-label">(optioneel)</span></label>
-                      <textarea id="bericht" value={form.bericht} onChange={(e) => set("bericht", e.target.value)} placeholder="Bijv. wanneer je wilt starten" rows={4} />
-                    </div>
-                  </>
-                )}
-              </div>
-
-              <div className="aanmeld-actions">
-                {step > 0 ? (
-                  <button type="button" className="aanmeld-link" onClick={handleBack}>
-                    Terug
-                  </button>
-                ) : (
-                  <span />
-                )}
-                {isLastStep ? (
-                  <button type="submit" className="btn btn-primary">
-                    Verstuur aanmelding
-                  </button>
-                ) : (
-                  <button type="button" className="btn btn-primary" onClick={handleNext}>
-                    Volgende stap
-                  </button>
-                )}
-              </div>
-            </form>
-          )}
-        </Reveal>
+                <div className="aanmeld-foot">
+                  {sendError ? (
+                    <a className="btn btn-primary aanmeld-submit" href={mailHref}>
+                      Mail ons direct
+                      <Icon name="arrow" size={18} />
+                    </a>
+                  ) : (
+                    <button type="submit" className="btn btn-primary aanmeld-submit" disabled={sending} aria-busy={sending}>
+                      {sending ? "Bezig met versturen…" : "Verstuur aanmelding"}
+                      {!sending && <Icon name="arrow" size={18} />}
+                    </button>
+                  )}
+                  <p className="aanmeld-reassure">
+                    <Icon name="shield" size={15} stroke={2} />
+                    Geen verplichtingen · meestal binnen 24 uur reactie
+                  </p>
+                </div>
+              </form>
+            )}
+          </Reveal>
+        </div>
       </div>
     </section>
+  );
+}
+
+/* ============================================================
+   WHATSAPP FAB
+   ============================================================ */
+function WhatsAppFab() {
+  return (
+    <a
+      className="whatsapp-fab"
+      href={WHATSAPP_URL}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Stuur een WhatsApp-bericht voor een proefles"
+    >
+      <WhatsAppIcon size={28} />
+    </a>
   );
 }
 
@@ -739,7 +987,7 @@ function Footer() {
               </span>
             </a>
             <p className="footer-about">
-              Persoonlijke rijlessen in de regio Rotterdam. Eén vaste, vertrouwde instructeur die je rustig en op jouw tempo naar je rijbewijs begeleidt.
+              Dé rijschool in Rotterdam voor persoonlijke rijlessen. Eén vaste instructeur begeleidt je rustig en op jouw tempo naar je rijbewijs B.
             </p>
           </div>
 
@@ -762,9 +1010,29 @@ function Footer() {
               <span className="footer-contact-label">E-mail</span>
               <span className="footer-contact-value">rijschoolconfiance@gmail.com</span>
             </a>
+            <address className="footer-contact footer-address">
+              <span className="footer-contact-label">Adres</span>
+              <span className="footer-contact-value">
+                Watergeusstraat 28E<br />
+                3025HS Rotterdam
+              </span>
+            </address>
+            <a
+              className="footer-contact"
+              href="https://www.google.com/maps/search/?api=1&query=Watergeusstraat+28E+3025HS+Rotterdam"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span className="footer-contact-label">Route</span>
+              <span className="footer-contact-value">Bekijk op Google Maps</span>
+            </a>
             <div className="footer-contact">
               <span className="footer-contact-label">Lesgebied</span>
-              <span className="footer-contact-value">Regio Rotterdam</span>
+              <span className="footer-contact-value">Rotterdam &amp; Rijnmond</span>
+            </div>
+            <div className="footer-contact">
+              <span className="footer-contact-label">CBR-nummer</span>
+              <span className="footer-contact-value">2001N9</span>
             </div>
           </div>
         </div>
@@ -785,8 +1053,8 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "stijl": "warm",
   "accent": "#2f6fd0",
   "koppen": "auto",
-  "heroTitle": "Leer rijden met <span class=\"hl\">vertrouwen</span>",
-  "heroSub": "Persoonlijke rijlessen in de regio Rotterdam. Rustige aanpak, vaste instructeur en je eerste les is gratis."
+  "heroTitle": "Rijschool Rotterdam leer rijden met <span class=\"hl\">vertrouwen</span>",
+  "heroSub": "Persoonlijke rijlessen in Rotterdam en de Rijnmond. Rustige aanpak, vaste instructeur en je eerste proefles is gratis."
 }/*EDITMODE-END*/;
 
 const FONT_MAP = {
@@ -858,6 +1126,7 @@ function App() {
         <Contact />
       </main>
       <Footer />
+      <WhatsAppFab />
 
       <TweaksPanel>
         <TweakSection label="Ontwerprichting" />

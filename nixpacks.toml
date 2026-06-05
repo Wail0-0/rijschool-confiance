@@ -1,9 +1,9 @@
-# Statische site: geen Node-app, alleen bestanden naar dist voor Coolify/nginx.
+# Node-server: serveert de statische site en verstuurt aanmeldingen via Resend.
 [phases.setup]
 nixPkgs = ["nodejs_22"]
 
-[phases.build]
-cmds = ["npm run build"]
+[phases.install]
+cmds = ["npm ci --omit=dev"]
 
-[staticAssets]
-outputDir = "dist"
+[start]
+cmd = "node server.js"
