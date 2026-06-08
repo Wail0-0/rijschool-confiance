@@ -5,11 +5,17 @@
    ============================================================ */
 import express from "express";
 import { Resend } from "resend";
+import { existsSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const app = express();
+
+// In productie serveren we de geoptimaliseerde build (dist/); valt terug op de
+// projectroot wanneer er nog geen build is gemaakt.
+const distDir = join(here, "dist");
+const staticDir = existsSync(join(distDir, "index.html")) ? distDir : here;
 
 const PORT = process.env.PORT || 3000;
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
@@ -128,8 +134,8 @@ app.post("/api/contact", async (req, res) => {
   }
 });
 
-app.use(express.static(here));
-app.get("*", (req, res) => res.sendFile(join(here, "index.html")));
+app.use(express.static(staticDir));
+app.get("*", (req, res) => res.sendFile(join(staticDir, "index.html")));
 
 app.listen(PORT, () => {
   console.log(`[server] Rijschool Confiance draait op poort ${PORT}`);

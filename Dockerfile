@@ -5,13 +5,15 @@ RUN apk add --no-cache nginx
 WORKDIR /app
 
 COPY package.json package-lock.json ./
-RUN npm ci --omit=dev
+RUN npm ci
 
 COPY . .
 
-RUN mkdir -p /usr/share/nginx/html \
-  && cp index.html styles.css app.jsx icons.jsx tweaks-panel.jsx image-slot.js robots.txt sitemap.xml /usr/share/nginx/html/ \
-  && cp -r images /usr/share/nginx/html/
+# Bouw de geoptimaliseerde productie-site (esbuild-bundel + landingspagina's)
+# en serveer de inhoud van dist/ via nginx.
+RUN npm run build \
+  && mkdir -p /usr/share/nginx/html \
+  && cp -r dist/. /usr/share/nginx/html/
 
 COPY nginx.conf /etc/nginx/http.d/default.conf
 

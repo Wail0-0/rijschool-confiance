@@ -1000,6 +1000,15 @@ function Footer() {
             <a href="#faq">Veelgestelde vragen</a>
           </nav>
 
+          <nav className="footer-col" aria-label="Rijlessen">
+            <h5>Rijlessen</h5>
+            <a href="/automaat-rijles-rotterdam/">Automaat rijles</a>
+            <a href="/spoedcursus-rijbewijs-rotterdam/">Spoedcursus rijbewijs</a>
+            <a href="/gratis-proefles-rotterdam/">Gratis proefles</a>
+            <a href="/rijschool-rotterdam-zuid/">Rotterdam-Zuid</a>
+            <a href="/rijschool-rotterdam-noord/">Rotterdam-Noord</a>
+          </nav>
+
           <div className="footer-col">
             <h5>Contact</h5>
             <a className="footer-contact" href="tel:+31684346439">

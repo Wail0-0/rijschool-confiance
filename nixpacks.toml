@@ -10,7 +10,10 @@
 nixPkgs = ["nodejs_22"]
 
 [phases.install]
-cmds = ["npm ci --omit=dev"]
+cmds = ["npm ci"]
+
+[phases.build]
+cmds = ["npm run build"]
 
 [variables]
 NIXPACKS_SPA_CADDY = "false"
