@@ -13,6 +13,11 @@ const files = [
   "image-slot.js",
   "robots.txt",
   "sitemap.xml",
+  "favicon.ico",
+  "favicon.svg",
+  "favicon-48x48.png",
+  "favicon-192x192.png",
+  "apple-touch-icon.png",
 ];
 
 function extractFaqFromApp(source) {
