@@ -47,10 +47,10 @@ const WHATSAPP_URL =
   );
 
 const FAQ = [
-  { q: "Is de proefles echt gratis?", a: "Ja! Je eerste les van 60 minuten is volledig gratis en vrijblijvend. Zo ervaar je rustig hoe het rijden bevalt in Rotterdam en of het klikt met je instructeur, zonder verplichtingen." },
+  { q: "Wat kost een proefles?", a: "Een proefles kost de helft van de prijs van een normale les. Bij een lespakket krijg je je eerste les gratis." },
   { q: "In welke wijken en gemeenten geven jullie rijles?", a: "We zijn een rijschool voor heel Rotterdam en de directe Rijnmond-regio: van Centrum en Rotterdam-Zuid tot Kralingen, Charlois, Delfshaven, Hillegersberg, Prins Alexander, Schiedam, Capelle aan den IJssel en Vlaardingen. Twijfel je over jouw adres? Stuur een berichtje, we kijken altijd mee." },
   { q: "Lessen jullie in schakel- of automaat?", a: "Ja, we bieden rijlessen in zowel schakel- als automaat. Kies de auto die bij jouw plannen past. Automaatlessen zijn €5 duurder per losse les en €100 duurder per lespakket." },
-  { q: "Wat kost een rijles in Rotterdam?", a: "Een losse les van 60 minuten kost €55 (schakel) of €60 (automaat). Een les van 90 minuten kost €75 of €80. Met een lespakket rijd je voordeliger richting je praktijkexamen. De gratis proefles staat hier los van." },
+  { q: "Wat kost een rijles in Rotterdam?", a: "Een losse les van 60 minuten kost €55 (schakel) of €60 (automaat). Een proefles kost de helft van een normale les. Bij een lespakket krijg je je eerste les gratis." },
   { q: "Hoe zit het met de tussentijdse toets en het CBR-examen?", a: "We begeleiden je richting de tussentijdse toets en het praktijkexamen bij CBR Rotterdam, inclusief je vertrouwde lesauto. De examenkosten van het CBR betaal je apart aan het CBR." },
   { q: "Waar halen jullie op voor de rijles?", a: "We halen je op in je eigen buurt in Rotterdam of de Rijnmond, zodat je direct oefent op straten en routes die je dagelijks tegenkomt en die relevant zijn voor het examen." },
   { q: "Hoe kan ik betalen?", a: "Je kunt per les of per pakket betalen. We stemmen samen een ritme af dat bij jou past, daar maken we het graag makkelijk in." },
@@ -148,7 +148,7 @@ function Nav() {
               <Icon name="phone" size={17} />
               <span>06 84 34 64 39</span>
             </a>
-            <a className="btn btn-primary nav-cta-btn" href="#contact">Gratis proefles</a>
+            <a className="btn btn-primary nav-cta-btn" href="#contact">Boek een proefles</a>
           </div>
           <button
             className="nav-toggle"
@@ -194,7 +194,7 @@ function Nav() {
         </nav>
         <div className="nav-mobile-foot">
           <a className="btn btn-primary" href="#contact" onClick={handleNavClick}>
-            Gratis proefles
+            Boek een proefles
             <Icon name="arrow" size={18} />
           </a>
           <a className="nav-mobile-phone" href="tel:+31684346439" onClick={handleNavClick}>
@@ -212,9 +212,9 @@ function Nav() {
    ============================================================ */
 function Hero({ title, sub }) {
   const usps = [
-    "Je eerste proefles is volledig gratis",
+    "Een proefles kost de helft van een normale les",
+    "Bij een lespakket krijg je je eerste les gratis",
     "Eén vaste, vertrouwde instructeur",
-    "Lessen op jouw tempo, zonder druk",
   ];
   return (
     <section className="hero section-pad" id="top" aria-label="Rijschool Rotterdam — intro">
@@ -230,7 +230,7 @@ function Hero({ title, sub }) {
           </Reveal>
           <Reveal className="hero-actions" style={{ transitionDelay: ".2s" }}>
             <a className="btn btn-primary btn-lg" href="#contact">
-              Plan je gratis proefles
+              Plan je proefles
               <Icon name="arrow" size={19} />
             </a>
             <a className="btn btn-ghost btn-lg" href="tel:+31684346439">
@@ -408,7 +408,7 @@ function Tarieven() {
         <Reveal className="sec-head center">
           <span className="eyebrow" style={{ justifyContent: "center" }}>Tarieven</span>
           <h2>Heldere prijzen, geen verrassingen</h2>
-          <p>Kies het pakket dat bij je past. Je start altijd met een gratis proefles.</p>
+          <p>Kies het pakket dat bij je past. Een proefles kost de helft van een normale les en bij een pakket krijg je je eerste les gratis.</p>
         </Reveal>
         <Reveal className="tarieven-transmissie">
           <span className="tarieven-transmissie-label">Schakel of automaat?</span>
@@ -661,22 +661,22 @@ function Faq() {
    CONTACT / FORMULIER
    ============================================================ */
 const CONTACT_TYPES = [
-  { value: "Gratis proefles", title: "Gratis proefles", icon: "car" },
+  { value: "Proefles", title: "Proefles", icon: "car" },
   { value: "Losse rijlessen", title: "Losse rijlessen", icon: "clock" },
   { value: "Lespakket", title: "Lespakket", icon: "award" },
   { value: "Een vraag", title: "Ik heb een vraag", icon: "smile" },
 ];
 const ASIDE_POINTS = [
-  "Je eerste proefles van 60 minuten is gratis",
+  "Een proefles kost de helft van een normale les",
+  "Bij een lespakket krijg je je eerste les gratis",
   "Eén vaste, vertrouwde instructeur",
-  "Lessen in schakel én automaat",
   "Meestal binnen 24 uur een reactie",
 ];
 const ASIDE_QUOTE = {
   text: "Eindelijk mijn rijbewijs behaald! Hele fijne rijschool en betaalbaar!",
   name: "Divano Zandgrond",
 };
-const EMPTY_FORM = { type: "Gratis proefles", transmissie: "schakel", naam: "", email: "", tel: "", plaats: "", bericht: "" };
+const EMPTY_FORM = { type: "Proefles", transmissie: "schakel", naam: "", email: "", tel: "", plaats: "", bericht: "" };
 
 function Contact() {
   const [form, setForm] = useState(EMPTY_FORM);
@@ -771,9 +771,9 @@ function Contact() {
             <div className="aanmeld-aside-glow" aria-hidden="true" />
             <div className="aanmeld-aside-top">
               <span className="eyebrow aanmeld-aside-eyebrow">Aanmelden</span>
-              <h2 className="aanmeld-aside-title">Plan je gratis proefles</h2>
+              <h2 className="aanmeld-aside-title">Plan je proefles</h2>
               <p className="aanmeld-aside-lead">
-                Laat je gegevens achter, dan plannen we samen een vrijblijvende proefles in.
+                Laat je gegevens achter, dan plannen we samen een proefles in.
                 Geen verplichtingen, gewoon kennismaken achter het stuur.
               </p>
             </div>
@@ -1004,7 +1004,7 @@ function Footer() {
             <h5>Rijlessen</h5>
             <a href="/automaat-rijles-rotterdam/">Automaat rijles</a>
             <a href="/spoedcursus-rijbewijs-rotterdam/">Spoedcursus rijbewijs</a>
-            <a href="/gratis-proefles-rotterdam/">Gratis proefles</a>
+            <a href="/gratis-proefles-rotterdam/">Proefles</a>
             <a href="/rijschool-rotterdam-zuid/">Rotterdam-Zuid</a>
             <a href="/rijschool-rotterdam-noord/">Rotterdam-Noord</a>
           </nav>
@@ -1063,7 +1063,7 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "accent": "#2f6fd0",
   "koppen": "auto",
   "heroTitle": "Rijschool Rotterdam leer rijden met <span class=\"hl\">vertrouwen</span>",
-  "heroSub": "Persoonlijke rijlessen in Rotterdam en de Rijnmond. Rustige aanpak, vaste instructeur en je eerste proefles is gratis."
+  "heroSub": "Persoonlijke rijlessen in Rotterdam en de Rijnmond. Rustige aanpak, vaste instructeur en een proefles voor de helft van een normale les."
 }/*EDITMODE-END*/;
 
 const FONT_MAP = {
