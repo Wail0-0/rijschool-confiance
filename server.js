@@ -82,7 +82,7 @@ app.post("/api/contact", async (req, res) => {
     ["Naam", naam],
     ["Telefoon", tel],
     ["E-mail", email],
-    ["Woonplaats", plaats],
+    ["Adres", plaats],
     ["Bericht", bericht],
   ]);
 
@@ -106,7 +106,7 @@ app.post("/api/contact", async (req, res) => {
     `Naam: ${naam}`,
     `Telefoon: ${tel}`,
     `E-mail: ${email}`,
-    plaats ? `Woonplaats: ${plaats}` : null,
+    plaats ? `Adres: ${plaats}` : null,
     bericht ? `\nBericht:\n${bericht}` : null,
   ]
     .filter((line) => line !== null)
