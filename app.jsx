@@ -758,7 +758,7 @@ function Contact() {
       "Naam: " + form.naam +
       "\nTelefoon: " + form.tel +
       "\nE-mail: " + form.email +
-      (form.plaats ? "\nWoonplaats: " + form.plaats : "") +
+      (form.plaats ? "\nAdres: " + form.plaats : "") +
       "\nAuto: " + (form.transmissie === "automaat" ? "Automaat" : "Schakel") +
       "\n\n" + form.bericht
     );
@@ -909,7 +909,7 @@ function Contact() {
                   </div>
 
                   <div className="aanmeld-field">
-                    <label htmlFor="plaats">Woonplaats <span className="aanmeld-opt-label">(optioneel)</span></label>
+                    <label htmlFor="plaats">Adres <span className="aanmeld-opt-label">(optioneel)</span></label>
                     <div className="aanmeld-input">
                       <span className="aanmeld-input-ico" aria-hidden="true"><Icon name="pin" size={17} stroke={2} /></span>
                       <input id="plaats" value={form.plaats} onChange={(e) => set("plaats", e.target.value)} placeholder="Bijv. Rotterdam-Zuid" autoComplete="address-level2" />
