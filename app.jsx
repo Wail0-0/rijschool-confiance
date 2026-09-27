@@ -356,7 +356,6 @@ const PAKKET_BASE = [
 const LOSSE_BASE = [
   { naam: "Losse les", per: "60 minuten", base: 55, automaatExtra: true },
   { naam: "Losse les", per: "90 minuten", base: 75, automaatExtra: true },
-  { naam: "Los examen", per: "praktijkexamen", base: 350, automaatExtra: false },
 ];
 
 const formatEuro = (n) => "€" + n;
