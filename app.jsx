@@ -358,7 +358,7 @@ const LOSSE_BASE = [
   { naam: "Losse les", per: "90 minuten", base: 82.50, automaatExtra: true },
 ];
 
-const formatEuro = (n) => "€" + n;
+const formatEuro = (n) => "€" + (Number.isInteger(n) ? n : n.toFixed(2));
 
 function TransmissieToggle({ value, onChange, id, block = false }) {
   return (
