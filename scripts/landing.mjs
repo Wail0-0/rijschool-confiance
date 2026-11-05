@@ -16,8 +16,6 @@ const WHATSAPP_URL =
 
 const ADDRESS_LD = {
   "@type": "PostalAddress",
-  streetAddress: "Watergeusstraat 28E",
-  postalCode: "3025HS",
   addressLocality: "Rotterdam",
   addressRegion: "Zuid-Holland",
   addressCountry: "NL",
@@ -281,10 +279,6 @@ const footer = () => `
           <span class="footer-contact-label">E-mail</span>
           <span class="footer-contact-value">${EMAIL}</span>
         </a>
-        <address class="footer-contact footer-address">
-          <span class="footer-contact-label">Adres</span>
-          <span class="footer-contact-value">Watergeusstraat 28E<br />3025HS Rotterdam</span>
-        </address>
         <div class="footer-contact">
           <span class="footer-contact-label">Lesgebied</span>
           <span class="footer-contact-value">Rotterdam &amp; Rijnmond</span>

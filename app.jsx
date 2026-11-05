@@ -588,7 +588,7 @@ function Reviews() {
               <small>5,0 · {GOOGLE_REVIEW_COUNT} reviews op Google</small>
               <a
                 className="rev-google-link"
-                href="https://www.google.com/maps/search/?api=1&query=Rijschool+Confiance+Watergeusstraat+28E+Rotterdam"
+                href="https://www.google.com/maps/search/?api=1&query=Rijschool+Confiance+Rotterdam"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -1017,22 +1017,6 @@ function Footer() {
             <a className="footer-contact" href="mailto:rijschoolconfiance@gmail.com">
               <span className="footer-contact-label">E-mail</span>
               <span className="footer-contact-value">rijschoolconfiance@gmail.com</span>
-            </a>
-            <address className="footer-contact footer-address">
-              <span className="footer-contact-label">Adres</span>
-              <span className="footer-contact-value">
-                Watergeusstraat 28E<br />
-                3025HS Rotterdam
-              </span>
-            </address>
-            <a
-              className="footer-contact"
-              href="https://www.google.com/maps/search/?api=1&query=Watergeusstraat+28E+3025HS+Rotterdam"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <span className="footer-contact-label">Route</span>
-              <span className="footer-contact-value">Bekijk op Google Maps</span>
             </a>
             <div className="footer-contact">
               <span className="footer-contact-label">Lesgebied</span>
