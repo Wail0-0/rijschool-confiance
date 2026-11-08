@@ -349,7 +349,7 @@ export const LANDING_PAGES = [
       {
         h: "Wat kost automaat rijles in Rotterdam?",
         p: [
-          "Een losse automaatles van 60 minuten kost \u20ac60 en een les van 90 minuten \u20ac80. Met een lespakket rijd je voordeliger richting je praktijkexamen; automaatpakketten zijn \u20ac100 hoger dan de schakelvariant en zijn inclusief praktijkexamen.",
+          "Een losse automaatles van 60 minuten kost \u20ac60 en een les van 90 minuten \u20ac90. Met een lespakket rijd je voordeliger richting je praktijkexamen; automaatpakketten zijn \u20ac100 hoger dan de schakelvariant.",
           "Je start altijd met een gratis proefles van 60 minuten. Zo ervaar je rustig hoe rijden in een automaat bevalt en of het klikt met je instructeur, zonder enige verplichting.",
         ],
       },
@@ -364,7 +364,7 @@ export const LANDING_PAGES = [
     faq: [
       {
         q: "Is automaat rijles duurder dan schakel?",
-        a: "Een losse automaatles is \u20ac5 duurder en een automaatpakket \u20ac100 duurder dan de schakelvariant. Daar staat tegenover dat veel leerlingen in een automaat sneller examenklaar zijn.",
+        a: "Een losse automaatles van 60 minuten is \u20ac5 duurder en een automaatpakket \u20ac100 duurder dan de schakelvariant. Daar staat tegenover dat veel leerlingen in een automaat sneller examenklaar zijn.",
       },
       {
         q: "Kan ik in een automaat sneller mijn rijbewijs halen?",

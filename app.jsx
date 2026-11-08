@@ -49,7 +49,7 @@ const WHATSAPP_URL =
 const FAQ = [
   { q: "Wat kost een proefles?", a: "Een proefles kost de helft van de prijs van een normale les. Bij een lespakket krijg je je eerste les gratis." },
   { q: "In welke wijken en gemeenten geven jullie rijles?", a: "We zijn een rijschool voor heel Rotterdam en de directe Rijnmond-regio: van Centrum en Rotterdam-Zuid tot Kralingen, Charlois, Delfshaven, Hillegersberg, Prins Alexander, Schiedam, Capelle aan den IJssel en Vlaardingen. Twijfel je over jouw adres? Stuur een berichtje, we kijken altijd mee." },
-  { q: "Lessen jullie in schakel- of automaat?", a: "Ja, we bieden rijlessen in zowel schakel- als automaat. Kies de auto die bij jouw plannen past. Automaatlessen zijn €5 duurder per losse les en €100 duurder per lespakket." },
+  { q: "Lessen jullie in schakel- of automaat?", a: "Ja, we bieden rijlessen in zowel schakel- als automaat. Kies de auto die bij jouw plannen past. Automaatlessen zijn €5 duurder per losse les van 60 minuten en €100 duurder per lespakket." },
   { q: "Wat kost een rijles in Rotterdam?", a: "Een losse les van 60 minuten kost €55 (schakel) of €60 (automaat). Een proefles kost de helft van een normale les. Bij een lespakket krijg je je eerste les gratis." },
   { q: "Hoe zit het met de tussentijdse toets en het CBR-examen?", a: "We begeleiden je richting de tussentijdse toets en het praktijkexamen bij CBR Rotterdam, inclusief je vertrouwde lesauto. De examenkosten van het CBR betaal je apart aan het CBR." },
   { q: "Waar halen jullie op voor de rijles?", a: "We halen je op in je eigen buurt in Rotterdam of de Rijnmond, zodat je direct oefent op straten en routes die je dagelijks tegenkomt en die relevant zijn voor het examen." },
@@ -337,25 +337,25 @@ const PAKKET_BASE = [
     tag: "Zilveren pakket", base: 1320,
     desc: "Een stevige basis om vol vertrouwen op te bouwen richting je examen.",
     feat: false,
-    list: ["20 rijlessen", "Inclusief praktijkexamen", "Vaste, vertrouwde instructeur"],
+    list: ["20 rijlessen", "Vaste, vertrouwde instructeur"],
   },
   {
     tag: "Gouden pakket", base: 1800,
     desc: "Onze meest gekozen optie: ruim de tijd om alles goed onder de knie te krijgen.",
     feat: true,
-    list: ["30 rijlessen", "Inclusief praktijkexamen", "Ideaal voor de meeste leerlingen"],
+    list: ["30 rijlessen", "Ideaal voor de meeste leerlingen"],
   },
   {
     tag: "Diamanten pakket", base: 2250,
     desc: "Alle ruimte en rust, zonder zorgen over extra lessen tot je er klaar voor bent.",
     feat: false,
-    list: ["40 rijlessen", "Inclusief praktijkexamen", "Maximale voorbereiding"],
+    list: ["40 rijlessen", "Maximale voorbereiding"],
   },
 ];
 
 const LOSSE_BASE = [
-  { naam: "Losse les", per: "60 minuten", base: 55, automaatExtra: true },
-  { naam: "Losse les", per: "90 minuten", base: 82.50, automaatExtra: true },
+  { naam: "Losse les", per: "60 minuten", base: 55, automaat: 60 },
+  { naam: "Losse les", per: "90 minuten", base: 82.50, automaat: 90 },
 ];
 
 const formatEuro = (n) => "€" + (Number.isInteger(n) ? n : n.toFixed(2));
@@ -390,7 +390,6 @@ function Tarieven() {
   const [transmissie, setTransmissie] = useState("schakel");
   const isAutomaat = transmissie === "automaat";
   const pakketExtra = isAutomaat ? 100 : 0;
-  const losseExtra = isAutomaat ? 5 : 0;
 
   const cards = PAKKET_BASE.map((c) => ({
     ...c,
@@ -398,7 +397,7 @@ function Tarieven() {
   }));
   const losse = LOSSE_BASE.map((l) => ({
     ...l,
-    val: formatEuro(l.base + (l.automaatExtra ? losseExtra : 0)),
+    val: formatEuro(isAutomaat ? l.automaat : l.base),
   }));
 
   return (
