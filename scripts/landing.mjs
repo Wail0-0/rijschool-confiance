@@ -422,7 +422,7 @@ export const LANDING_PAGES = [
       },
       {
         q: "Zit het praktijkexamen bij de spoedcursus inbegrepen?",
-        a: "We begeleiden je volledig richting het praktijkexamen bij CBR Rotterdam. De examenkosten van het CBR betaal je apart aan het CBR; deze staan los van de lesprijs.",
+        a: "We begeleiden je volledig richting het praktijkexamen bij CBR Rotterdam.; deze staan los van de lesprijs.",
       },
       {
         q: "Kan een spoedcursus ook in automaat?",
